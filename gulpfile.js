@@ -6,9 +6,13 @@ var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
+var bs = require('browser-sync');
+var reload = bs.reload;
+var stylus = require('gulp-stylus');
 
 var paths = {
-  sass: ['./scss/**/*.scss']
+  sass: ['./scss/**/*.scss'],
+  stylus: ['www/**/*.styl'],
 };
 
 gulp.task('default', ['sass']);
@@ -48,3 +52,23 @@ gulp.task('git-check', function(done) {
   }
   done();
 });
+
+gulp.task('stylus', function() {
+  return gulp.src(['www/style.styl'])
+    .pipe(stylus())
+    .pipe(gulp.dest('www/css'))
+    .pipe(reload({ stream: true }));
+});
+
+gulp.task('serve', function() {
+  bs({
+    notify: true,
+    server: {
+      baseDir: 'www'
+    },
+    files: ['www/app/**/*.html', 'www/index.html']
+  });
+
+  gulp.watch(paths.stylus, ['stylus']);
+});
+
