@@ -2,11 +2,6 @@
   "name": "seeds",
   "version": "1.0.0",
   "description": "seeds: An Ionic project",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "postinstall": "gulp install",
-    "start": "gulp serve"
-  },
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-sass": "^0.7.1",

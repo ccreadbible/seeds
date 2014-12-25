@@ -1,0 +1,9 @@
+<ion-view view-title="聖經">
+  <ion-content>
+    <ion-list>
+      <ion-item ng-repeat="reading in readings" href="#/main/readings/{{$index}}">
+        {{reading.date}}
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
