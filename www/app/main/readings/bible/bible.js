@@ -11,11 +11,13 @@ angular.module('seeds.main.bible', [])
       views: {
         'menuContent': {
           templateUrl: 'app/main/readings/bible/bible.tpl.html',
-          controller: 'BibleCtrl as bible'
+          controller: 'BibleCtrl'
         }
       }
     });
 })
-.controller('BibleCtrl', function($scope){
-  
+.controller('BibleCtrl', function($scope, $actions, $store, $stateParams){
+  $store.bindTo($scope, function(){
+    $scope.reading = $store.getReading($stateParams.bibleId);
+  });
 });

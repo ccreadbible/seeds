@@ -1,5 +1,9 @@
 <ion-view view-title="Bible">
   <ion-content>
-    <h1>Bible</h1>
+    <h1 ng-model="reading.date">{{reading.date}}</h1>
+    <section ng-bind-html='reading.reading1'></section>
+
+
+    <section ng-bind-html='reading.gospel'></section>
   </ion-content>
 </ion-view>
