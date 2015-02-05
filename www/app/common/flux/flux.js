@@ -2,7 +2,6 @@ angular.module('seeds.common.flux',[])
   .factory('$actions', function(flux){
     return flux.actions([
       'loadReadings',
-      'loadMedia',
       'loadHomilyList',
       'createAudioObj'
     ]);
@@ -17,7 +16,6 @@ angular.module('seeds.common.flux',[])
 
       actions:[
         $actions.loadReadings,
-        $actions.loadMedia,
         $actions.loadHomilyList,
         $actions.createAudioObj
       ],
@@ -29,14 +27,9 @@ angular.module('seeds.common.flux',[])
           method: 'GET',
           url: URLS.api + '/readings'
         }).then(function(res){
-
           self.readings = res.data.verses;
           self.emitChange();
         });
-      },
-
-      loadMedia: function(){
-
       },
 
       loadHomilyList:function(){

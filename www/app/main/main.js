@@ -7,7 +7,7 @@ angular.module('seeds.main', [
   'seeds.main.readings',
   'seeds.main.bible',
   'seeds.main.homilyList',
-  'seeds.main.media'
+  'seeds.main.home'
 ])
 .config(function($stateProvider) {
   $stateProvider

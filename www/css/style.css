@@ -1,5 +1,8 @@
 h1 {
-  color: #00f;
+  font-size: 1.4em;
+}
+.title {
+  text-align: center;
 }
 div.buttons {
   margin: 5px;
@@ -22,4 +25,7 @@ div.buttons {
   border-color: transparent;
   font-size: 1.4em;
   color: #808080;
+}
+.content-wrapper {
+  padding: 0 4%;
 }

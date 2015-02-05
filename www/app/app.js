@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('seeds', [
   'ionic', 'seeds.main',
-  'seeds.common', 'flux'])
+  'seeds.common', 'flux', 'ngMaterial'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -32,7 +32,7 @@ angular.module('seeds', [
       controller: 'AppCtrl'
     });
  
-  $urlRouterProvider.otherwise('/main/readings');
+  $urlRouterProvider.otherwise('/main/home');
 })
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
   // Form data for the login modal
