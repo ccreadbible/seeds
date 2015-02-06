@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v0.6.1
+ * v0.6.0-rc3-master-98c3152
  */
 goog.provide('ng.material.components.slider');
 goog.require('ng.material.core');
@@ -47,7 +47,7 @@ angular.module('material.components.slider', [
  * </md-slider>
  * </hljs>
  *
- * @param {boolean=} md-discrete Whether to enable discrete mode.
+ * @param {boolean=} mdDiscrete Whether to enable discrete mode.
  * @param {number=} step The distance between values the user is allowed to pick. Default 1.
  * @param {number=} min The minimum value the user is allowed to pick. Default 0.
  * @param {number=} max The maximum value the user is allowed to pick. Default 100.
@@ -170,12 +170,10 @@ function SliderController($scope, $element, $attrs, $$rAF, $window, $mdAria, $md
     function updateMin(value) {
       min = parseFloat(value);
       $element.attr('aria-valuemin', value);
-      updateAll();
     }
     function updateMax(value) {
       max = parseFloat(value);
       $element.attr('aria-valuemax', value);
-      updateAll();
     }
     function updateStep(value) {
       step = parseFloat(value);
@@ -266,7 +264,6 @@ function SliderController($scope, $element, $attrs, $$rAF, $window, $mdAria, $md
       $scope.modelValue = ngModelCtrl.$viewValue;
       $element.attr('aria-valuenow', ngModelCtrl.$viewValue);
       setSliderPercent(percent);
-      thumbText.text( ngModelCtrl.$viewValue );
     }
 
     function minMaxValidator(value) {

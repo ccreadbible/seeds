@@ -5,8 +5,12 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 angular.module('seeds', [
-  'ionic', 'seeds.main',
-  'seeds.common', 'flux', 'ngMaterial'])
+  'ionic', 
+  'seeds.common', 
+  'seeds.main',
+  'flux',
+  'ngMaterial'
+  ])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -31,7 +35,7 @@ angular.module('seeds', [
       template: '<ion-nav-view></ion-nav-view>',
       controller: 'AppCtrl'
     });
- 
+  
   $urlRouterProvider.otherwise('/main/home');
 })
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
