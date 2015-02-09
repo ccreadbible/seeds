@@ -6,7 +6,8 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('seeds', [
   'ionic', 'seeds.main',
-  'seeds.common', 'flux', 'ngMaterial'])
+  'seeds.common', 'flux', 
+  'ngMaterial'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -22,8 +23,8 @@ angular.module('seeds', [
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
-    
+.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+  $ionicConfigProvider.backButton.previousTitleText(false).text('');
   $stateProvider
     .state('seeds', {
       abstract: true,

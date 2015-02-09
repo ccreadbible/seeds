@@ -1,2 +1,35 @@
+
+/*tabs*/
+md-tabs.md-default-theme section.md-header
+  background-color rgb(244, 244, 244)
+  border-top 1px rgba(128, 128, 128, 0.24) solid
+
+md-tabs.md-default-theme md-tab.active
+  color #FF9800
+
+md-tabs.md-default-theme md-tab
+  color #727272
+
+md-tabs.md-default-theme md-tabs-ink-bar
+  color: #FF9800
+  background: #FF9800 //tab underline
+
+md-tab[aria-selected="true"]
+  border 0
+
+/*tab content*/
+md-tab .scroll-view
+  position: absolute;
+  top: 4em;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
 .content-wrapper
-  padding 0 4%
+  padding 0 4% 6em
+
+/*footer*/
+.bible-view .bar-footer
+  background-color rgb(244, 244, 244)
+.bible-view .bar-footer button
+  color #FF9800

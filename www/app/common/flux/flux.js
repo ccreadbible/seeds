@@ -3,7 +3,8 @@ angular.module('seeds.common.flux',[])
     return flux.actions([
       'loadReadings',
       'loadHomilyList',
-      'createAudioObj'
+      'createAudioObj',
+      'resizeFont'
     ]);
   })
   .factory('$store', function(flux, $actions, $http, URLS){
@@ -13,11 +14,13 @@ angular.module('seeds.common.flux',[])
       homily: [],
       audio: undefined,
       lastPlay: 0,
+      fontSize: 12,
 
       actions:[
         $actions.loadReadings,
         $actions.loadHomilyList,
-        $actions.createAudioObj
+        $actions.createAudioObj,
+        $actions.resizeFont
       ],
 
       loadReadings: function(){
@@ -47,6 +50,16 @@ angular.module('seeds.common.flux',[])
 
       createAudioObj: function(){
         this.audio = new Audio();
+      },
+
+      resizeFont: function(option) {
+        if(this.fontSize === 10 && option === 0 ||
+           this.fontSize === 28 && option === 1)
+          return;
+        if(option === 0) //decrease size
+          this.fontSize -= 1;
+        else
+          this.fontSize += 1;
       },
 
       exports:{
@@ -84,6 +97,10 @@ angular.module('seeds.common.flux',[])
           this.audio.pause();
           console.log(this.audio.currentTime);
           this.audio.currentTime = 0.0;
+        },
+
+        getFontSize: function() {
+          return this.fontSize;
         }
 
       }

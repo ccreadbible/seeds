@@ -19,6 +19,13 @@ angular.module('seeds.main.bible', [])
 .controller('BibleCtrl', function($scope, $actions, $store, $stateParams){
   $store.bindTo($scope, function(){
     $scope.reading = $store.getReading($stateParams.bibleId);
+    angular.element("section").css('font-size', $store.getFontSize());
+
   });
 
+  this.resizeFont = function(option){
+    $actions.resizeFont(option);
+    angular.element("section").css('font-size', $store.getFontSize());
+
+  }
 });
