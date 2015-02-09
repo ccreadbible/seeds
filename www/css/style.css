@@ -21,8 +21,9 @@ ion-header-bar {
   top: 30vh;
 }
 ion-side-menu ion-content,
-ion-side-menu ion-content .item-complex a.item-content,
-background-color #C6C6C6,
+ion-side-menu ion-content .item-complex a.item-content {
+  background-color: #c6c6c6;
+}
 .dark-primary-color {
   background: #0097a7;
 }
@@ -80,7 +81,6 @@ ion-view.readings-view .long-header {
   width: 100%;
 }
 ion-view.readings-view .long-header .title {
-  top: 19vh;
   font-size: 1.8rem;
   text-align: center;
 }
