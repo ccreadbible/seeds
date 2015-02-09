@@ -1,25 +1,17 @@
 <div class="top-header dark-primary-color"></div>
 <ion-view class="readings-view" view-title="一週讀經">
-  <ion-nav-bar align-title="center" class="default-primary-color">
+  <ion-nav-bar align-title="center" class="default-primary-color long-header">
     <ion-nav-buttons side="left">
       <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
       </button>
     </ion-nav-buttons>
-
   </ion-nav-bar>
   <ion-content class="has-long-header">
     <ion-list type="list">
-      <ion-item ng-repeat="reading in readings" href="#/main/readings/{{$index}}">
+      <ion-item ng-repeat="reading in readings" href="#/main/readings/{{$index}}"
+      nav-transition="ios">
         {{reading.date}}
       </ion-item>
     </ion-list>
   </ion-content>
-  <!-- <ion-content>
-    <div class="card" ng-repeat="reading in readings">
-      <a class="item item-content" href="#/main/readings/{{$index}}">
-        {{reading.date}}
-      </a>
-    </div>
-  </ion-content>
- -->
 </ion-view>

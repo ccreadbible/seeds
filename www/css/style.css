@@ -6,7 +6,7 @@ h1 {
   font-size: 1.4em;
 }
 .title,
-.button.button-icon,
+.bar-header .button,
 ion-header-bar i {
   color: #fff;
 }
@@ -22,7 +22,7 @@ ion-header-bar {
 }
 ion-side-menu ion-content,
 ion-side-menu ion-content .item-complex a.item-content {
-  background-color: #aaa;
+  background-color: #b6b6b6;
 }
 .dark-primary-color {
   background: #0097a7;
@@ -80,12 +80,16 @@ ion-view.readings-view.pane {
 .top-header {
   height: 3vh;
 }
-ion-view.readings-view .bar {
+ion-view.readings-view .bar-header {
   height: 30vh;
 }
 ion-view.readings-view .title {
   top: 9vh;
   font-size: 1.8rem;
+}
+.bible-view .bar .back-button.hide,
+.bar .buttons .hide {
+  display: inline-block;
 }
 md-tabs.md-default-theme section.md-header {
   background-color: #f4f4f4;
@@ -115,6 +119,7 @@ md-tab .scroll-view {
   padding: 0 4% 6em;
 }
 .bible-view .bar-footer {
+  display: none;
   background-color: #f4f4f4;
 }
 .bible-view .bar-footer button {
