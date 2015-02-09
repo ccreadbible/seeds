@@ -35,6 +35,16 @@ angular.module('seeds.common.flux',[])
         });
       },
 
+      resizeFont: function(option) {
+        if(this.fontSize === 10 && option === 0 ||
+           this.fontSize === 28 && option === 1)
+          return;
+        if(option === 0) //decrease size
+          this.fontSize -= 1;
+        else
+          this.fontSize += 1;
+      },
+
       loadHomilyList:function(){
         var self = this;
 

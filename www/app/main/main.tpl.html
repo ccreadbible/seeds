@@ -1,6 +1,6 @@
 <ion-side-menus enable-menu-with-back-views="false">
   <ion-side-menu-content>
-    <!-- <ion-nav-bar class="bar-stable">
+    <ion-nav-bar class="default-primary-color">
       <ion-nav-back-button>
       </ion-nav-back-button>
 
@@ -13,18 +13,29 @@
   </ion-side-menu-content>
 
   <ion-side-menu side="left">
+    <!-- <ion-header-bar class="bar-stable">
+      <div class="buttons">
+        <button class="button" ng-click="login()">登入</button>
+      </div>
+      <h1 class="title">選單</h1>
+      <div class="buttons">
+        <button class="button">註冊</button>
+      </div>
+    </ion-header-bar> -->
     <ion-content>
       <ion-list>
-        <ion-item nav-clear menu-close ui-sref="seeds.main.home" ui-sref-active="active" class="item item-icon-left">
+        <ion-item nav-clear menu-close ui-sref="seeds.main.home" 
+          ui-sref-active="active" class="item item-icon-left">
           <i class="icon ion-home"></i>
           主頁
         </ion-item>
-        <ion-item nav-clear menu-close ui-sref="seeds.main.readings" ui-sref-active="active" class="item item-icon-left">
+        <ion-item nav-clear menu-close ui-sref="seeds.main.readings" 
+          ui-sref-active="active" class="item item-icon-left">
           <i class="icon ion-ios-book"></i>
           聖經
         </ion-item>
-
-        <ion-item nav-clear menu-close ui-sref="seeds.main.homilyList" ui-sref-active="active" class="item item-icon-left">
+        <ion-item nav-clear menu-close 
+          ui-sref="seeds.main.homilyList" ui-sref-active="active" class="item item-icon-left">
           <i class="icon ion-radio-waves"></i>
           講道音頻
         </ion-item>

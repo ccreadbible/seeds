@@ -21,7 +21,6 @@ angular.module('seeds.main.bible', [])
   $store.bindTo($scope, function(){
     $scope.reading = $store.getReading($stateParams.bibleId);
     angular.element("section").css('font-size', $store.getFontSize());
-
   });
   
   this.resizeFont = function(option){
