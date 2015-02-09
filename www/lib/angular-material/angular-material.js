@@ -2,9 +2,9 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v0.6.1
+ * v0.6.0-rc3-master-98c3152
  */
-angular.module('ngMaterial', ["ng","ngAnimate","ngAria","material.core","material.components.backdrop","material.components.bottomSheet","material.components.button","material.components.card","material.components.checkbox","material.components.content","material.components.dialog","material.components.divider","material.components.icon","material.components.list","material.components.progressCircular","material.components.progressLinear","material.components.radioButton","material.components.sidenav","material.components.slider","material.components.sticky","material.components.subheader","material.components.swipe","material.components.switch","material.components.tabs","material.components.textField","material.components.toolbar","material.components.toast","material.components.tooltip","material.components.whiteframe"]);
+angular.module('ngMaterial', ["ng","ngAnimate","ngAria","material.core","material.components.backdrop","material.components.bottomSheet","material.components.button","material.components.card","material.components.checkbox","material.components.content","material.components.dialog","material.components.divider","material.components.icon","material.components.list","material.components.progressCircular","material.components.progressLinear","material.components.radioButton","material.components.sidenav","material.components.slider","material.components.sticky","material.components.subheader","material.components.swipe","material.components.switch","material.components.tabs","material.components.textField","material.components.toast","material.components.toolbar","material.components.tooltip","material.components.whiteframe"]);
 (function() {
 'use strict';
 
@@ -100,14 +100,6 @@ function MdConstantFactory($$rAF, $sniffer) {
       ANIMATION_NAME: vendorProperty('animationName'),
       ANIMATION_TIMING: vendorProperty('animationTimingFunction'),
       ANIMATION_DIRECTION: vendorProperty('animationDirection')
-    },
-    MEDIA: {
-      'sm': '(max-width: 600px)',
-      'gt-sm': '(min-width: 600px)',
-      'md': '(min-width: 600px) and (max-width: 960px)',
-      'gt-md': '(min-width: 960px)',
-      'lg': '(min-width: 960px) and (max-width: 1200px)',
-      'gt-lg': '(min-width: 1200px)'
     }
   };
 }
@@ -698,7 +690,7 @@ function mdCompilerService($q, $http, $injector, $compile, $controller, $templat
     return $q.all(resolve).then(function(locals) {
 
       var template = transformTemplate(locals.$template);
-      var element = angular.element('<div>').html(template.trim()).contents();
+      var element = angular.element('<div>').html(template).contents();
       var linkFn = $compile(element);
 
       //Return a linking function that can be used later when the element is ready
@@ -774,7 +766,6 @@ function InterimElementProvider() {
    * as well as configuration of 'preset' methods (eg dialog.basic(): basic is a preset method)
    */
   function createInterimElementProvider(interimFactoryName) {
-    var EXPOSED_METHODS = ['onHide', 'onShow', 'onRemove'];
     var providerConfig = {
       presets: {}
     };
@@ -788,7 +779,7 @@ function InterimElementProvider() {
      * all interim elements will come with the 'build' preset
      */
     provider.addPreset('build', {
-      methods: ['controller', 'controllerAs', 'resolve',
+      methods: ['controller', 'controllerAs', 'onRemove', 'onShow', 'resolve',
         'template', 'templateUrl', 'themable', 'transformTemplate', 'parent']
     });
 
@@ -800,10 +791,9 @@ function InterimElementProvider() {
      */
     function setDefaults(definition) {
       providerConfig.optionsFactory = definition.options;
-      providerConfig.methods = (definition.methods || []).concat(EXPOSED_METHODS);
+      providerConfig.methods = definition.methods;
       return provider;
     }
-
     /**
      * Save the configured preset to be used when the factory is instantiated
      */
@@ -819,9 +809,8 @@ function InterimElementProvider() {
         throw new Error("Method '_options' in " + interimFactoryName + " is reserved!");
       }
       providerConfig.presets[name] = {
-        methods: definition.methods.concat(EXPOSED_METHODS),
-        optionsFactory: definition.options,
-        argOption: definition.argOption
+        methods: definition.methods,
+        optionsFactory: definition.options
       };
       return provider;
     }
@@ -885,19 +874,8 @@ function InterimElementProvider() {
         });
 
         // eg $mdDialog.alert() will return a new alert preset
-        publicService[name] = function(arg) {
-          // If argOption is supplied, eg `argOption: 'content'`, then we assume
-          // if the argument is not an options object then it is the `argOption` option.
-          //
-          // @example `$mdToast.simple('hello')` // sets options.content to hello
-          //                                     // because argOption === 'content'
-          if (arguments.length && definition.argOption && !angular.isObject(arg) &&
-              !angular.isArray(arg)) {
-            return (new Preset())[definition.argOption](arg);
-          } else {
-            return new Preset(arg);
-          }
-
+        publicService[name] = function(options) {
+          return new Preset(options);
         };
       });
 
@@ -906,9 +884,8 @@ function InterimElementProvider() {
       function showInterimElement(opts) {
         // opts is either a preset which stores its options on an _options field,
         // or just an object made up of options
-        if (opts && opts._options) opts = opts._options;
         return interimElementService.show(
-          angular.extend({}, defaultOptions, opts)
+          angular.extend({}, defaultOptions, (opts || {})._options || opts)
         );
       }
 
@@ -946,22 +923,9 @@ function InterimElementProvider() {
       return service = {
         show: show,
         hide: hide,
-        cancel: cancel
+        cancel: cancel,
       };
 
-      /*
-       * @ngdoc method
-       * @name $$interimElement.$service#show
-       * @kind function
-       *
-       * @description
-       * Adds the `$interimElement` to the DOM and returns a promise that will be resolved or rejected
-       * with hide or cancel, respectively.
-       *
-       * @param {*} options is hashMap of settings
-       * @returns a Promise
-       *
-       */
       function show(options) {
         if (stack.length) {
           service.cancel();
@@ -984,7 +948,8 @@ function InterimElementProvider() {
        * Removes the `$interimElement` from the DOM and resolves the promise returned from `show`
        *
        * @param {*} resolveParam Data to resolve the promise with
-       * @returns a Promise that will be resolved after the element has been removed.
+       *
+       * @returns undefined data that resolves after the element has been removed.
        *
        */
       function hide(response) {
@@ -992,8 +957,6 @@ function InterimElementProvider() {
         interimElement && interimElement.remove().then(function() {
           interimElement.deferred.resolve(response);
         });
-
-        return interimElement ? interimElement.deferred.promise : $q.when(response);
       }
 
       /*
@@ -1005,7 +968,8 @@ function InterimElementProvider() {
        * Removes the `$interimElement` from the DOM and rejects the promise returned from `show`
        *
        * @param {*} reason Data to reject the promise with
-       * @returns Promise that will be rejected after the element has been removed.
+       *
+       * @returns undefined
        *
        */
       function cancel(reason) {
@@ -1013,8 +977,6 @@ function InterimElementProvider() {
         interimElement && interimElement.remove().then(function() {
           interimElement.deferred.reject(reason);
         });
-
-        return interimElement ? interimElement.deferred.promise : $q.reject(reason);
       }
 
 
@@ -1255,7 +1217,7 @@ function InkRippleService($window, $timeout) {
           elemIsHeld   = ripples.length > 1 ? false : isHeld;
       if (elemIsActive || state.animating || elemIsHeld) {
         elem.addClass('md-ripple-visible');
-      } else if (elem) {
+      } else {
         elem.removeClass('md-ripple-visible');
         if (options.outline) {
           elem.css({
@@ -1278,8 +1240,6 @@ function InkRippleService($window, $timeout) {
      * @returns {angular.element} the generated ripple element
      */
     function createRipple(left, top) {
-
-      color = parseColor(element.attr('md-ink-ripple')) || parseColor($window.getComputedStyle(options.colorElement[0]).color || 'rgb(0, 0, 0)');
 
       var container = getRippleContainer(),
           size = getRippleSize(left, top),
@@ -1769,7 +1729,8 @@ function MdBottomSheetProvider($$interimElementProvider) {
     });
 
   /* @ngInject */
-  function bottomSheetDefaults($animate, $mdConstant, $timeout, $$rAF, $compile, $mdTheming, $mdBottomSheet, $rootElement) {
+  function bottomSheetDefaults($animate, $mdConstant, $timeout, $$rAF, $compile, $mdTheming,
+                               $mdBottomSheet, $rootElement) {
     var backdrop;
 
     return {
@@ -1782,7 +1743,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
 
     function onShow(scope, element, options) {
       // Add a backdrop that will close on click
-      backdrop = $compile('<md-backdrop class="md-opaque md-bottom-sheet-backdrop">')(scope);
+      backdrop = $compile('<md-backdrop class="md-opaque ng-enter">')(scope);
       backdrop.on('click touchstart', function() {
         $timeout($mdBottomSheet.cancel);
       });
@@ -1800,12 +1761,12 @@ function MdBottomSheetProvider($$interimElementProvider) {
 
       return $animate.enter(bottomSheet.element, options.parent)
         .then(function() {
-          var focusable = angular.element(
+          var focusableItems = angular.element(
             element[0].querySelector('button') ||
             element[0].querySelector('a') ||
             element[0].querySelector('[ng-click]')
           );
-          focusable.focus();
+          focusableItems.eq(0).focus();
 
           if (options.escapeToClose) {
             options.rootElementKeyupCallback = function(e) {
@@ -1964,10 +1925,9 @@ angular.module('material.components.button', [
  * If you supply a `href` or `ng-href` attribute, it will become an `<a>` element. Otherwise, it will
  * become a `<button>` element.
  *
- * @param {boolean=} md-no-ink If present, disable ripple ink effects.
- * @param {expression=} ng-disabled En/Disable based on the expression
- * @param {string=} aria-label Adds alternative text to button for accessibility, useful for icon buttons.
- * If no default text is found, a warning will be logged.
+ * @param {boolean=} mdNoInk If present, disable ripple ink effects.
+ * @param {expression=} ngDisabled En/Disable based on the expre
+ * @param {string=} ariaLabel Publish the button label used by screen-readers for accessibility. Defaults to the button's text.
  *
  * @usage
  * <hljs lang="html">
@@ -2102,14 +2062,13 @@ angular.module('material.components.checkbox', [
  * @description
  * The checkbox directive is used like the normal [angular checkbox](https://docs.angularjs.org/api/ng/input/input%5Bcheckbox%5D).
  *
- * @param {string} ng-model Assignable angular expression to data-bind to.
+ * @param {string} ngModel Assignable angular expression to data-bind to.
  * @param {string=} name Property name of the form under which the control is published.
- * @param {expression=} ng-true-value The value to which the expression should be set when selected.
- * @param {expression=} ng-false-value The value to which the expression should be set when not selected.
- * @param {string=} ng-change Angular expression to be executed when input changes due to user interaction with the input element.
- * @param {boolean=} md-no-ink Use of attribute indicates use of ripple ink effects
- * @param {string=} aria-label Adds label to checkbox for accessibility.
- * Defaults to checkbox's text. If no default text is found, a warning will be logged.
+ * @param {expression=} ngTrueValue The value to which the expression should be set when selected.
+ * @param {expression=} ngFalseValue The value to which the expression should be set when not selected.
+ * @param {string=} ngChange Angular expression to be executed when input changes due to user interaction with the input element.
+ * @param {boolean=} mdNoInk Use of attribute indicates use of ripple ink effects
+ * @param {string=} ariaLabel Publish the button label used by screen-readers for accessibility. Defaults to the checkbox's text.
  *
  * @usage
  * <hljs lang="html">
@@ -2524,18 +2483,18 @@ function MdDialogProvider($$interimElementProvider) {
   var alertDialogMethods = ['title', 'content', 'ariaLabel', 'ok'];
 
   advancedDialogOptions.$inject = ["$mdDialog"];
-  dialogDefaultOptions.$inject = ["$timeout", "$rootElement", "$compile", "$animate", "$mdAria", "$document", "$mdUtil", "$mdConstant", "$mdTheming", "$$rAF", "$q", "$mdDialog"];
+  dialogDefaultOptions.$inject = ["$timeout", "$rootElement", "$compile", "$animate", "$mdAria", "$mdUtil", "$mdConstant", "$mdTheming", "$$rAF", "$q", "$mdDialog"];
   return $$interimElementProvider('$mdDialog')
     .setDefaults({
       methods: ['hasBackdrop', 'clickOutsideToClose', 'escapeToClose', 'targetEvent'],
       options: dialogDefaultOptions
     })
     .addPreset('alert', {
-      methods: ['title', 'content', 'ariaLabel', 'ok'],
+      methods: alertDialogMethods,
       options: advancedDialogOptions
     })
     .addPreset('confirm', {
-      methods: ['title', 'content', 'ariaLabel', 'ok', 'cancel'],
+      methods: alertDialogMethods.concat('cancel'),
       options: advancedDialogOptions
     });
 
@@ -2572,7 +2531,7 @@ function MdDialogProvider($$interimElementProvider) {
   }
 
   /* @ngInject */
-  function dialogDefaultOptions($timeout, $rootElement, $compile, $animate, $mdAria, $document,
+  function dialogDefaultOptions($timeout, $rootElement, $compile, $animate, $mdAria,
                                 $mdUtil, $mdConstant, $mdTheming, $$rAF, $q, $mdDialog) {
     return {
       hasBackdrop: true,
@@ -2598,9 +2557,9 @@ function MdDialogProvider($$interimElementProvider) {
       configureAria(element.find('md-dialog'));
 
       if (options.hasBackdrop) {
-        options.backdrop = angular.element('<md-backdrop class="md-dialog-backdrop md-opaque">');
+        options.backdrop = $compile('<md-backdrop class="md-opaque ng-enter">')(scope);
         $mdTheming.inherit(options.backdrop, options.parent);
-        $animate.enter(options.backdrop, options.parent);
+        $animate.enter(options.backdrop, options.parent, null);
       }
 
       return dialogPopIn(
@@ -2649,6 +2608,7 @@ function MdDialogProvider($$interimElementProvider) {
 
       if (options.backdrop) {
         $animate.leave(options.backdrop);
+        element.data('backdrop', undefined);
       }
       if (options.escapeToClose) {
         $rootElement.off('keyup', options.rootElementKeyupCallback);
@@ -2656,12 +2616,7 @@ function MdDialogProvider($$interimElementProvider) {
       if (options.clickOutsideToClose) {
         element.off('click', options.dialogClickOutsideCallback);
       }
-      return dialogPopOut(
-        element,
-        options.parent,
-        options.popInTarget.length && options.popInTarget
-      ).then(function() {
-        options.scope.$destroy();
+      return $animate.leave(element).then(function() {
         element.remove();
         options.popInTarget && options.popInTarget.focus();
       });
@@ -2687,58 +2642,45 @@ function MdDialogProvider($$interimElementProvider) {
       });
     }
 
-    function dialogPopIn(container, parentElement, clickElement) {
-      var dialogEl = container.find('md-dialog');
+    function dialogPopIn(element, parentElement, clickElement) {
+      var deferred = $q.defer();
+      parentElement.append(element);
 
-      parentElement.append(container);
-      transformToClickElement(dialogEl, clickElement);
-
-      $$rAF(function() {
-        dialogEl.addClass('transition-in')
-          .css($mdConstant.CSS.TRANSFORM, '');
-      });
-
-      return dialogTransitionEnd(dialogEl);
-    }
-    
-    function dialogPopOut(container, parentElement, clickElement) {
-      var dialogEl = container.find('md-dialog');
-
-      dialogEl.addClass('transition-out').removeClass('transition-in');
-      transformToClickElement(dialogEl, clickElement);
-
-      return dialogTransitionEnd(dialogEl);
-    }
-
-    function transformToClickElement(dialogEl, clickElement) {
+      var startPos;
       if (clickElement) {
         var clickRect = clickElement[0].getBoundingClientRect();
-        var dialogRect = dialogEl[0].getBoundingClientRect();
-
-        var scaleX = Math.min(0.5, clickRect.width / dialogRect.width);
-        var scaleY = Math.min(0.5, clickRect.height / dialogRect.height);
-
-        dialogEl.css($mdConstant.CSS.TRANSFORM, 'translate3d(' +
-          (-dialogRect.left + clickRect.left + clickRect.width/2 - dialogRect.width/2) + 'px,' +
-          (-dialogRect.top + clickRect.top + clickRect.height/2 - dialogRect.height/2) + 'px,' +
-          '0) scale(' + scaleX + ',' + scaleY + ')'
-        );
+        startPos = 'translate3d(' +
+          (clickRect.left - element[0].offsetWidth / 2) + 'px,' +
+          (clickRect.top - element[0].offsetHeight / 2) + 'px,' +
+          '0) scale(0.2)';
+      } else {
+        startPos = 'translate3d(0,100%,0) scale(0.5)';
       }
-    }
 
-    function dialogTransitionEnd(dialogEl) {
-      var deferred = $q.defer();
-      dialogEl.on($mdConstant.CSS.TRANSITIONEND, finished);
+      element
+        .css($mdConstant.CSS.TRANSFORM, startPos)
+        .css('opacity', 0);
+
+      $$rAF(function() {
+        $$rAF(function() {
+          element
+          .addClass('md-active')
+          .css($mdConstant.CSS.TRANSFORM, '')
+          .css('opacity', '')
+          .on($mdConstant.CSS.TRANSITIONEND, finished);
+        });
+      });
+
       function finished(ev) {
         //Make sure this transitionend didn't bubble up from a child
-        if (ev.target === dialogEl[0]) {
-          dialogEl.off($mdConstant.CSS.TRANSITIONEND, finished);
+        if (ev.target === element[0]) {
+          element.off($mdConstant.CSS.TRANSITIONEND, finished);
           deferred.resolve();
         }
       }
+
       return deferred.promise;
     }
-
   }
 }
 MdDialogProvider.$inject = ["$$interimElementProvider"];
@@ -2769,7 +2711,7 @@ function MdDividerController(){}
  * @description
  * Dividers group and separate content within lists and page layouts using strong visual and spatial distinctions. This divider is a thin rule, lightweight enough to not distract the user from content.
  *
- * @param {boolean=} md-inset Add this attribute to activate the inset divider style.
+ * @param {boolean=} mdInset Add this attribute to activate the inset divider style.
  * @usage
  * <hljs lang="html">
  * <md-divider></md-divider>
@@ -2861,20 +2803,19 @@ angular.module('material.components.list', [
  * @usage
  * <hljs lang="html">
  * <md-list>
- *   <md-item ng-repeat="item in todos">
- *     <md-item-content>
- *       <div class="md-tile-left">
- *         <img ng-src="{{item.face}}" class="face" alt="{{item.who}}">
- *       </div>
- *       <div class="md-tile-content">
- *         <h3>{{item.what}}</h3>
- *         <h4>{{item.who}}</h4>
- *         <p>
- *           {{item.notes}}
- *         </p>
- *       </div>
- *     </md-item-content>
- *   </md-item>
+ *  <md-item ng-repeat="item in todos">
+ *    <div class="md-tile-left">
+ *      <img ng-src="{{item.face}}" class="face" alt="{{item.who}}">
+ *    </div>
+ *    <div class="md-tile-content">
+ *      <h3>{{item.what}}</h3>
+ *      <h4>{{item.who}}</h4>
+ *      <p>
+ *        {{item.notes}}
+ *      </p>
+ *    </div>
+ *
+ *  </md-item>
  * </md-list>
  * </hljs>
  *
@@ -2948,9 +2889,9 @@ angular.module('material.components.progressCircular', [
  *
  * For operations where the user is asked to wait a moment while something finishes up, and it’s not necessary to expose what's happening behind the scenes and how long it will take, use an indeterminate indicator.
  *
- * @param {string} md-mode Select from one of two modes: determinate and indeterminate.
+ * @param {string} mdMode Select from one of two modes: determinate and indeterminate.
  * @param {number=} value In determinate mode, this number represents the percentage of the circular progress. Default: 0
- * @param {number=} md-diameter This specifies the diamter of the circular progress. Default: 48
+ * @param {number=} mdDiameter This specifies the diamter of the circular progress. Default: 48
  *
  * @usage
  * <hljs lang="html">
@@ -2977,18 +2918,18 @@ function MdProgressCircularDirective($$rAF, $mdConstant, $mdTheming) {
 
   return {
     restrict: 'E',
-    template:
-        '<div class="md-spinner-wrapper">' +
-          '<div class="md-inner">' +
-            '<div class="md-gap"></div>' +
-            '<div class="md-left">' +
-              '<div class="md-half-circle"></div>' +
-            '</div>' +
-            '<div class="md-right">' +
-              '<div class="md-half-circle"></div>' +
-            '</div>' +
-          '</div>' +
-        '</div>',
+    template: 
+      '<div class="md-wrapper1"><div class="md-wrapper2"><div class="md-circle">' +
+        '<div class="md-mask md-full">' +
+          '<div class="md-fill"></div>' +
+        '</div>' +
+        '<div class="md-mask md-half">' +
+          '<div class="md-fill"></div>' +
+          '<div class="md-fill md-fix"></div>' +
+        '</div>' +
+        '<div class="md-shadow"></div>' +
+      '</div>' +
+      '<div class="md-inset"></div></div></div>',
     compile: compile
   };
 
@@ -3071,9 +3012,9 @@ angular.module('material.components.progressLinear', [
  *
  * For operations where the user is asked to wait a moment while something finishes up, and it’s not necessary to expose what's happening behind the scenes and how long it will take, use an indeterminate indicator.
  *
- * @param {string} md-mode Select from one of four modes: determinate, indeterminate, buffer or query.
+ * @param {string} mdMode Select from one of four modes: determinate, indeterminate, buffer or query.
  * @param {number=} value In determinate and buffer modes, this number represents the percentage of the primary progress bar. Default: 0
- * @param {number=} md-buffer-value In the buffer mode, this number represents the precentage of the secondary progress bar. Default: 0
+ * @param {number=} mdBufferValue In the buffer mode, this number represents the precentage of the secondary progress bar. Default: 0
  *
  * @usage
  * <hljs lang="html">
@@ -3199,8 +3140,8 @@ angular.module('material.components.radioButton', [
  * force the user to tab through all the radio buttons, `<md-radio-group>`
  * is focusable, and by default the `<md-radio-button>`s are not.
  *
- * @param {string} ng-model Assignable angular expression to data-bind to.
- * @param {boolean=} md-no-ink Use of attribute indicates flag to disable ink ripple effects.
+ * @param {string} ngModel Assignable angular expression to data-bind to.
+ * @param {boolean=} mdNoInk Use of attribute indicates flag to disable ink ripple effects.
  *
  * @usage
  * <hljs lang="html">
@@ -3330,7 +3271,7 @@ mdRadioGroupDirective.$inject = ["$mdUtil", "$mdConstant", "$mdTheming"];
  * @restrict E
  *
  * @description
- * The `<md-radio-button>`directive is the child directive required to be used within `<md-radio-group>` elements.
+ * The `<md-radio-button>`directive is the child directive required to be used within `<md-radioo-group>` elements.
  *
  * While similar to the `<input type="radio" ng-model="" value="">` directive,
  * the `<md-radio-button>` directive provides ink effects, ARIA support, and
@@ -3343,8 +3284,7 @@ mdRadioGroupDirective.$inject = ["$mdUtil", "$mdConstant", "$mdTheming"];
  *    be set when selected.*
  * @param {string} value The value to which the expression should be set when selected.
  * @param {string=} name Property name of the form under which the control is published.
- * @param {string=} ariaLabel Adds label to radio button for accessibility.
- * Defaults to radio button's text. If no default text is found, a warning will be logged.
+ * @param {string=} ariaLabel Publish the button label used by screen-readers for accessibility. Defaults to the radio button's text.
  *
  * @usage
  * <hljs lang="html">
@@ -3474,18 +3414,19 @@ angular.module('material.components.sidenav', [
 function mdSidenavController($scope, $element, $attrs, $timeout, $mdSidenav, $mdComponentRegistry) {
 
   var self = this;
-  self.destroy = $mdComponentRegistry.register(self, $attrs.mdComponentId);
 
-  self.isOpen = function() {
+  this.destroy = $mdComponentRegistry.register(this, $attrs.mdComponentId);
+
+  this.isOpen = function() {
     return !!$scope.isOpen;
   };
-  self.toggle = function() {
+  this.toggle = function() {
     $scope.isOpen = !$scope.isOpen;
   };
-  self.open = function() {
+  this.open = function() {
     $scope.isOpen = true;
   };
-  self.close = function() {
+  this.close = function() {
     $scope.isOpen = false;
   };
 }
@@ -3582,19 +3523,19 @@ mdSidenavService.$inject = ["$mdComponentRegistry"];
  * });
  * </hljs>
  *
- * @param {expression=} md-is-open A model bound to whether the sidenav is opened.
- * @param {string=} md-component-id componentId to use with $mdSidenav service.
- * @param {expression=} md-is-locked-open When this expression evalutes to true,
+ * @param {expression=} mdIsOpen A model bound to whether the sidenav is opened.
+ * @param {string=} mdComponentId componentId to use with $mdSidenav service.
+ * @param {expression=} mdIsLockedOpen When this expression evalutes to true,
  * the sidenav 'locks open': it falls into the content's flow instead
  * of appearing over it. This overrides the `is-open` attribute.
  *
  * A $media() function is exposed to the is-locked-open attribute, which
- * can be given a media query or one of the `sm`, `gt-sm`, `md`, `gt-md`, `lg` or `gt-lg` presets.
+ * can be given a media query or one of the `sm`, `md` or `lg` presets.
  * Examples:
  *
  *   - `<md-sidenav md-is-locked-open="shouldLockOpen"></md-sidenav>`
  *   - `<md-sidenav md-is-locked-open="$media('min-width: 1000px')"></md-sidenav>`
- *   - `<md-sidenav md-is-locked-open="$media('sm')"></md-sidenav>` (locks open on small screens)
+ *   - `<md-sidenav md-is-locked-open="$media('sm')"></md-sidenav>` <!-- locks open on small screens !-->
  */
 function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $compile, $mdTheming) {
   return {
@@ -3613,7 +3554,7 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $
   function postLink(scope, element, attr, sidenavCtrl) {
     var isLockedOpenParsed = $parse(attr.mdIsLockedOpen);
     var backdrop = $compile(
-      '<md-backdrop class="md-sidenav-backdrop md-opaque ng-enter">'
+      '<md-backdrop class="md-sidenav-backdrop md-opaque">'
     )(scope);
 
     $mdTheming.inherit(backdrop, element);
@@ -3686,8 +3627,13 @@ mdSidenavDirective.$inject = ["$timeout", "$animate", "$parse", "$mdMedia", "$md
  * @example $mdMedia('(min-width: 1200px)') == true if device-width >= 1200px
  * @example $mdMedia('max-width: 300px') == true if device-width <= 300px (sanitizes input, adding parens)
  */
-function mdMediaFactory($window, $mdUtil, $timeout, $mdConstant) {
+function mdMediaFactory($window, $mdUtil, $timeout) {
   var cache = $mdUtil.cacheFactory('$mdMedia', { capacity: 15 });
+  var presets = {
+    sm: '(min-width: 600px)',
+    md: '(min-width: 960px)',
+    lg: '(min-width: 1200px)'
+  };
 
   angular.element($window).on('resize', updateAll);
 
@@ -3703,7 +3649,7 @@ function mdMediaFactory($window, $mdUtil, $timeout, $mdConstant) {
   }
 
   function validate(query) {
-    return $mdConstant.MEDIA[query] || (
+    return presets[query] || (
       query.charAt(0) != '(' ?  ('(' + query + ')') : query
     );
   }
@@ -3724,7 +3670,7 @@ function mdMediaFactory($window, $mdUtil, $timeout, $mdConstant) {
   }
 
 }
-mdMediaFactory.$inject = ["$window", "$mdUtil", "$timeout", "$mdConstant"];
+mdMediaFactory.$inject = ["$window", "$mdUtil", "$timeout"];
 
 function mdComponentRegistry($log) {
   var instances = [];
@@ -3820,7 +3766,7 @@ angular.module('material.components.slider', [
  * </md-slider>
  * </hljs>
  *
- * @param {boolean=} md-discrete Whether to enable discrete mode.
+ * @param {boolean=} mdDiscrete Whether to enable discrete mode.
  * @param {number=} step The distance between values the user is allowed to pick. Default 1.
  * @param {number=} min The minimum value the user is allowed to pick. Default 0.
  * @param {number=} max The maximum value the user is allowed to pick. Default 100.
@@ -3943,12 +3889,10 @@ function SliderController($scope, $element, $attrs, $$rAF, $window, $mdAria, $md
     function updateMin(value) {
       min = parseFloat(value);
       $element.attr('aria-valuemin', value);
-      updateAll();
     }
     function updateMax(value) {
       max = parseFloat(value);
       $element.attr('aria-valuemax', value);
-      updateAll();
     }
     function updateStep(value) {
       step = parseFloat(value);
@@ -4039,7 +3983,6 @@ function SliderController($scope, $element, $attrs, $$rAF, $window, $mdAria, $md
       $scope.modelValue = ngModelCtrl.$viewValue;
       $element.attr('aria-valuenow', ngModelCtrl.$viewValue);
       setSliderPercent(percent);
-      thumbText.text( ngModelCtrl.$viewValue );
     }
 
     function minMaxValidator(value) {
@@ -4802,13 +4745,13 @@ angular.module('material.components.switch', [
  *
  * The switch directive is used very much like the normal [angular checkbox](https://docs.angularjs.org/api/ng/input/input%5Bcheckbox%5D).
  *
- * @param {string} ng-model Assignable angular expression to data-bind to.
+ * @param {string} ngModel Assignable angular expression to data-bind to.
  * @param {string=} name Property name of the form under which the control is published.
- * @param {expression=} ng-true-value The value to which the expression should be set when selected.
- * @param {expression=} ng-false-value The value to which the expression should be set when not selected.
- * @param {string=} ng-change Angular expression to be executed when input changes due to user interaction with the input element.
- * @param {boolean=} md-no-ink Use of attribute indicates use of ripple ink effects.
- * @param {string=} aria-label Publish the button label used by screen-readers for accessibility. Defaults to the switch's text.
+ * @param {expression=} ngTrueValue The value to which the expression should be set when selected.
+ * @param {expression=} ngFalseValue The value to which the expression should be set when not selected.
+ * @param {string=} ngChange Angular expression to be executed when input changes due to user interaction with the input element.
+ * @param {boolean=} mdNoInk Use of attribute indicates use of ripple ink effects.
+ * @param {string=} ariaLabel Publish the button label used by screen-readers for accessibility. Defaults to the switch's text.
  *
  * @usage
  * <hljs lang="html">
@@ -4914,10 +4857,10 @@ angular.module('material.components.textField', [
  * @description
  * Use the `<md-text-float>` directive to quickly construct `Floating Label` text fields
  *
- * @param {string} ng-model Model expression used for two-way data binding with the input value.
- * @param {string} label String value or expression that specifies the input text field label/hint.
+ * @param {string} mdFid Attribute used for accessibility link pairing between the Label and Input elements
  * @param {string=} type Optional value to define the type of input field. Defaults to string.
- * @param {string=} md-fid Optional attribute used for accessibility link pairing between the Label and Input elements
+ * @param {string} label Attribute to specify the input text field hint.
+ * @param {string=} ng-model Optional value to assign as existing input text string
  *
  * @usage
  * <hljs lang="html">
@@ -5084,159 +5027,6 @@ mdInputDirective.$inject = ["$mdUtil"];
 
 /**
  * @ngdoc module
- * @name material.components.toolbar
- */
-angular.module('material.components.toolbar', [
-  'material.core',
-  'material.components.content'
-])
-  .directive('mdToolbar', mdToolbarDirective);
-
-/**
- * @ngdoc directive
- * @name mdToolbar
- * @module material.components.toolbar
- * @restrict E
- * @description
- * `md-toolbar` is used to place a toolbar in your app.
- *
- * Toolbars are usually used above a content area to display the title of the
- * current page, and show relevant action buttons for that page.
- *
- * You can change the height of the toolbar by adding either the
- * `md-medium-tall` or `md-tall` class to the toolbar.
- *
- * @usage
- * <hljs lang="html">
- * <div layout="column" layout-fill>
- *   <md-toolbar>
- *
- *     <div class="md-toolbar-tools">
- *       <span>My App's Title</span>
- *
- *       <!-- fill up the space between left and right area -->
- *       <span flex></span>
- *
- *       <md-button>
- *         Right Bar Button
- *       </md-button>
- *     </div>
- *
- *   </md-toolbar>
- *   <md-content>
- *     Hello!
- *   </md-content>
- * </div>
- * </hljs>
- *
- * @param {boolean=} md-scroll-shrink Whether the header should shrink away as
- * the user scrolls down, and reveal itself as the user scrolls up.
- * Note: for scrollShrink to work, the toolbar must be a sibling of a
- * `md-content` element, placed before it. See the scroll shrink demo.
- *
- *
- * @param {number=} md-shrink-speed-factor How much to change the speed of the toolbar's
- * shrinking by. For example, if 0.25 is given then the toolbar will shrink
- * at one fourth the rate at which the user scrolls down. Default 0.5.
- */
-function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming) {
-
-  return {
-    restrict: 'E',
-    controller: angular.noop,
-    link: function(scope, element, attr) {
-      $mdTheming(element);
-
-      if (angular.isDefined(attr.mdScrollShrink)) {
-        setupScrollShrink();
-      }
-
-      function setupScrollShrink() {
-        // Current "y" position of scroll
-        var y = 0;
-        // Store the last scroll top position
-        var prevScrollTop = 0;
-
-        var shrinkSpeedFactor = attr.mdShrinkSpeedFactor || 0.5;
-
-        var toolbarHeight;
-        var contentElement;
-
-        var debouncedContentScroll = $$rAF.debounce(onContentScroll);
-        var debouncedUpdateHeight = $mdUtil.debounce(updateToolbarHeight, 5 * 1000);
-
-        // Wait for $mdContentLoaded event from mdContent directive.
-        // If the mdContent element is a sibling of our toolbar, hook it up
-        // to scroll events.
-        scope.$on('$mdContentLoaded', onMdContentLoad);
-
-        function onMdContentLoad($event, newContentEl) {
-          // Toolbar and content must be siblings
-          if (element.parent()[0] === newContentEl.parent()[0]) {
-            // unhook old content event listener if exists
-            if (contentElement) {
-              contentElement.off('scroll', debouncedContentScroll);
-            }
-
-            newContentEl.on('scroll', debouncedContentScroll);
-            newContentEl.attr('scroll-shrink', 'true');
-
-            contentElement = newContentEl;
-            $$rAF(updateToolbarHeight);
-          }
-        }
-
-        function updateToolbarHeight() {
-          toolbarHeight = element.prop('offsetHeight');
-          // Add a negative margin-top the size of the toolbar to the content el.
-          // The content will start transformed down the toolbarHeight amount,
-          // so everything looks normal.
-          //
-          // As the user scrolls down, the content will be transformed up slowly
-          // to put the content underneath where the toolbar was.
-          contentElement.css(
-            'margin-top',
-            (-toolbarHeight * shrinkSpeedFactor) + 'px'
-          );
-          onContentScroll();
-        }
-
-        function onContentScroll(e) {
-          var scrollTop = e ? e.target.scrollTop : prevScrollTop;
-
-          debouncedUpdateHeight();
-
-          y = Math.min(
-            toolbarHeight / shrinkSpeedFactor,
-            Math.max(0, y + scrollTop - prevScrollTop)
-          );
-
-          element.css(
-            $mdConstant.CSS.TRANSFORM,
-            'translate3d(0,' + (-y * shrinkSpeedFactor) + 'px,0)'
-          );
-          contentElement.css(
-            $mdConstant.CSS.TRANSFORM,
-            'translate3d(0,' + ((toolbarHeight - y) * shrinkSpeedFactor) + 'px,0)'
-          );
-
-          prevScrollTop = scrollTop;
-        }
-
-      }
-
-    }
-  };
-
-}
-mdToolbarDirective.$inject = ["$$rAF", "$mdConstant", "$mdUtil", "$mdTheming"];
-})();
-
-(function() {
-'use strict';
-
-/**
- * @ngdoc module
  * @name material.components.toast
  * @description
  * Toast
@@ -5380,7 +5170,6 @@ function MdToastProvider($$interimElementProvider) {
       options: toastDefaultOptions
     })
     .addPreset('simple', {
-      argOption: 'content',
       methods: ['content', 'action', 'highlightAction'],
       options: /* @ngInject */ ["$mdToast", function($mdToast) {
         return {
@@ -5452,6 +5241,159 @@ MdToastProvider.$inject = ["$$interimElementProvider"];
 
 /**
  * @ngdoc module
+ * @name material.components.toolbar
+ */
+angular.module('material.components.toolbar', [
+  'material.core',
+  'material.components.content'
+])
+  .directive('mdToolbar', mdToolbarDirective);
+
+/**
+ * @ngdoc directive
+ * @name mdToolbar
+ * @module material.components.toolbar
+ * @restrict E
+ * @description
+ * `md-toolbar` is used to place a toolbar in your app.
+ *
+ * Toolbars are usually used above a content area to display the title of the
+ * current page, and show relevant action buttons for that page.
+ *
+ * You can change the height of the toolbar by adding either the
+ * `md-medium-tall` or `md-tall` class to the toolbar.
+ *
+ * @usage
+ * <hljs lang="html">
+ * <div layout="column" layout-fill>
+ *   <md-toolbar>
+ *
+ *     <div class="md-toolbar-tools">
+ *       <span>My App's Title</span>
+ *
+ *       <!-- fill up the space between left and right area -->
+ *       <span flex></span>
+ *
+ *       <md-button>
+ *         Right Bar Button
+ *       </md-button>
+ *     </div>
+ *
+ *   </md-toolbar>
+ *   <md-content>
+ *     Hello!
+ *   </md-content>
+ * </div>
+ * </hljs>
+ *
+ * @param {boolean=} mdScrollShrink Whether the header should shrink away as
+ * the user scrolls down, and reveal itself as the user scrolls up.
+ * Note: for scrollShrink to work, the toolbar must be a sibling of a
+ * `md-content` element, placed before it. See the scroll shrink demo.
+ *
+ *
+ * @param {number=} mdShrinkSpeedFactor How much to change the speed of the toolbar's
+ * shrinking by. For example, if 0.25 is given then the toolbar will shrink
+ * at one fourth the rate at which the user scrolls down. Default 0.5.
+ */
+function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming) {
+
+  return {
+    restrict: 'E',
+    controller: angular.noop,
+    link: function(scope, element, attr) {
+      $mdTheming(element);
+
+      if (angular.isDefined(attr.mdScrollShrink)) {
+        setupScrollShrink();
+      }
+
+      function setupScrollShrink() {
+        // Current "y" position of scroll
+        var y = 0;
+        // Store the last scroll top position
+        var prevScrollTop = 0;
+
+        var shrinkSpeedFactor = attr.mdShrinkSpeedFactor || 0.5;
+
+        var toolbarHeight;
+        var contentElement;
+
+        var debouncedContentScroll = $$rAF.debounce(onContentScroll);
+        var debouncedUpdateHeight = $mdUtil.debounce(updateToolbarHeight, 5 * 1000);
+
+        // Wait for $mdContentLoaded event from mdContent directive.
+        // If the mdContent element is a sibling of our toolbar, hook it up
+        // to scroll events.
+        scope.$on('$mdContentLoaded', onMdContentLoad);
+
+        function onMdContentLoad($event, newContentEl) {
+          // Toolbar and content must be siblings
+          if (element.parent()[0] === newContentEl.parent()[0]) {
+            // unhook old content event listener if exists
+            if (contentElement) {
+              contentElement.off('scroll', debouncedContentScroll);
+            }
+
+            newContentEl.on('scroll', debouncedContentScroll);
+            newContentEl.attr('scroll-shrink', 'true');
+
+            contentElement = newContentEl;
+            $$rAF(updateToolbarHeight);
+          }
+        }
+
+        function updateToolbarHeight() {
+          toolbarHeight = element.prop('offsetHeight');
+          // Add a negative margin-top the size of the toolbar to the content el.
+          // The content will start transformed down the toolbarHeight amount,
+          // so everything looks normal.
+          //
+          // As the user scrolls down, the content will be transformed up slowly
+          // to put the content underneath where the toolbar was.
+          contentElement.css(
+            'margin-top',
+            (-toolbarHeight * shrinkSpeedFactor) + 'px'
+          );
+          onContentScroll();
+        }
+
+        function onContentScroll(e) {
+          var scrollTop = e ? e.target.scrollTop : prevScrollTop;
+
+          debouncedUpdateHeight();
+
+          y = Math.min(
+            toolbarHeight / shrinkSpeedFactor,
+            Math.max(0, y + scrollTop - prevScrollTop)
+          );
+
+          element.css(
+            $mdConstant.CSS.TRANSFORM,
+            'translate3d(0,' + (-y * shrinkSpeedFactor) + 'px,0)'
+          );
+          contentElement.css(
+            $mdConstant.CSS.TRANSFORM,
+            'translate3d(0,' + ((toolbarHeight - y) * shrinkSpeedFactor) + 'px,0)'
+          );
+
+          prevScrollTop = scrollTop;
+        }
+
+      }
+
+    }
+  };
+
+}
+mdToolbarDirective.$inject = ["$$rAF", "$mdConstant", "$mdUtil", "$mdTheming"];
+})();
+
+(function() {
+'use strict';
+
+/**
+ * @ngdoc module
  * @name material.components.tooltip
  */
 angular.module('material.components.tooltip', [
@@ -5479,7 +5421,7 @@ angular.module('material.components.tooltip', [
  * </md-icon>
  * </hljs>
  *
- * @param {expression=} md-visible Boolean bound to whether the tooltip is
+ * @param {expression=} mdVisible Boolean bound to whether the tooltip is
  * currently visible.
  */
 function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdTheming) {
@@ -5714,7 +5656,7 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
 
   // TODO allow configuration of TAB_MIN_WIDTH
   // Must match tab min-width rule in _tabs.scss
-  var TAB_MIN_WIDTH = 8 * 12;
+  var TAB_MIN_WIDTH = 8 * 12; 
   // Must match (2 * width of paginators) in scss
   var PAGINATORS_WIDTH = (8 * 4) * 2;
 
@@ -5740,26 +5682,26 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
     scope.$on('$mdTabsChanged', debouncedUpdatePagination);
     angular.element($window).on('resize', debouncedUpdatePagination);
 
+    // Listen to focus events bubbling up from md-tab elements
+    tabsParent.on('focusin', onTabsFocusIn);
+
     scope.$on('$destroy', function() {
       angular.element($window).off('resize', debouncedUpdatePagination);
+      tabsParent.off('focusin', onTabsFocusIn);
     });
 
     scope.$watch(tabsCtrl.selected, onSelectedTabChange);
-    scope.$watch(function() {
-      return tabsCtrl.tabToFocus;
-    }, onTabFocus);
 
-    // Make sure we don't focus an element on the next page
-    // before it's in view
-    function onTabFocus(tab, oldTab) {
-      if (!tab) return;
+    // Allows pagination through focus change.
+    function onTabsFocusIn(ev) {
+      if (!state.active) return;
 
+      var tab = angular.element(ev.target).controller('mdTab');
       var pageIndex = getPageForTab(tab);
-      if (!state.active || pageIndex === state.page) {
-        tab.element.focus();
-      } else {
+      if (pageIndex !== state.page) {
+        // If the focused element is on a new page, don't focus yet.
+        tab.element.blur();
         // Go to the new page, wait for the page transition to end, then focus.
-        oldTab && oldTab.element.blur();
         setPage(pageIndex).then(function() {
           tab.element.focus();
         });
@@ -5821,7 +5763,7 @@ function TabPaginationDirective($mdConstant, $window, $$rAF, $$q, $timeout) {
         state.pagesCount = Math.ceil((TAB_MIN_WIDTH * tabsCtrl.count()) / tabsWidth);
         state.itemsPerPage = Math.max(1, Math.floor(tabsCtrl.count() / state.pagesCount));
         state.tabWidth = tabsWidth / state.itemsPerPage;
-
+        
         tabsParent.css('width', state.tabWidth * tabsCtrl.count() + 'px');
         tabs.css('width', state.tabWidth + 'px');
 
@@ -6007,10 +5949,10 @@ angular.module('material.components.tabs')
  * be initiated via data binding changes, programmatic invocation, or user gestures.
  *
  * @param {string=} label Optional attribute to specify a simple string as the tab label
- * @param {boolean=} md-active When evaluteing to true, selects the tab.
+ * @param {boolean=} mdActive When evaluteing to true, selects the tab.
  * @param {boolean=} disabled If present, disabled tab selection.
- * @param {expression=} md-on-deselect Expression to be evaluated after the tab has been de-selected.
- * @param {expression=} md-on-select Expression to be evaluated after the tab has been selected.
+ * @param {expression=} mdOnDeselect Expression to be evaluated after the tab has been de-selected.
+ * @param {expression=} mdOnSelect Expression to be evaluated after the tab has been selected.
  *
  *
  * @usage
@@ -6113,7 +6055,7 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
       function defaultClickListener() {
         scope.$apply(function() {
           tabsCtrl.select(tabItemCtrl);
-          tabsCtrl.focus(tabItemCtrl);
+          tabItemCtrl.element.focus();
         });
       }
       function keydownListener(ev) {
@@ -6121,14 +6063,14 @@ function MdTabDirective($mdInkRipple, $compile, $mdAria, $mdUtil, $mdConstant) {
           // Fire the click handler to do normal selection if space is pressed
           element.triggerHandler('click');
           ev.preventDefault();
+
         } else if (ev.keyCode === $mdConstant.KEY_CODE.LEFT_ARROW) {
-          scope.$evalAsync(function() {
-            tabsCtrl.focus(tabsCtrl.previous(tabItemCtrl));
-          });
+          var previous = tabsCtrl.previous(tabItemCtrl);
+          previous && previous.element.focus();
+
         } else if (ev.keyCode === $mdConstant.KEY_CODE.RIGHT_ARROW) {
-          scope.$evalAsync(function() {
-            tabsCtrl.focus(tabsCtrl.next(tabItemCtrl));
-          });
+          var next = tabsCtrl.next(tabItemCtrl);
+          next && next.element.focus();
         }
       }
 
@@ -6227,7 +6169,6 @@ function MdTabsController($scope, $element, $mdUtil) {
 
   // Properties
   self.$element = $element;
-  self.scope = $scope;
   // The section containing the tab content $elements
   self.contentArea = angular.element($element[0].querySelector('.md-tabs-content'));
 
@@ -6242,7 +6183,6 @@ function MdTabsController($scope, $element, $mdUtil) {
   self.remove = remove;
   self.move = move;
   self.select = select;
-  self.focus = focus;
   self.deselect = deselect;
 
   self.next = next;
@@ -6317,11 +6257,6 @@ function MdTabsController($scope, $element, $mdUtil) {
     tab.onSelect();
   }
 
-  function focus(tab) {
-    // this variable is $watch'd by pagination
-    self.tabToFocus = tab;
-  }
-
   function deselect(tab) {
     if (!tab || !tab.isSelected) return;
     if (!tabsList.contains(tab)) return;
@@ -6393,10 +6328,10 @@ angular.module('material.components.tabs')
  * *  If the currently active tab is the last tab, then next() action will select the first tab.
  * *  Any markup (other than **`<md-tab>`** tags) will be transcluded into the tab header area BEFORE the tab buttons.
  *
- * @param {integer=} md-selected Index of the active/selected tab
- * @param {boolean=} md-no-ink If present, disables ink ripple effects.
- * @param {boolean=} md-no-bar If present, disables the selection ink bar.
- * @param {string=}  md-align-tabs Attribute to indicate position of tab buttons: bottom or top; default is `top`
+ * @param {integer=} mdSelected Index of the active/selected tab
+ * @param {boolean=} mdNoInk If present, disables ink ripple effects.
+ * @param {boolean=} mdNoBar If present, disables the selection ink bar.
+ * @param {string=}  mdAlignTabs Attribute to indicate position of tab buttons: bottom or top; default is `top`
  *
  * @usage
  * <hljs lang="html">

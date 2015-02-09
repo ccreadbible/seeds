@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v0.6.1
+ * v0.6.0-rc3-master-98c3152
  */
 (function() {
 'use strict';
@@ -36,18 +36,19 @@ angular.module('material.components.sidenav', [
 function mdSidenavController($scope, $element, $attrs, $timeout, $mdSidenav, $mdComponentRegistry) {
 
   var self = this;
-  self.destroy = $mdComponentRegistry.register(self, $attrs.mdComponentId);
 
-  self.isOpen = function() {
+  this.destroy = $mdComponentRegistry.register(this, $attrs.mdComponentId);
+
+  this.isOpen = function() {
     return !!$scope.isOpen;
   };
-  self.toggle = function() {
+  this.toggle = function() {
     $scope.isOpen = !$scope.isOpen;
   };
-  self.open = function() {
+  this.open = function() {
     $scope.isOpen = true;
   };
-  self.close = function() {
+  this.close = function() {
     $scope.isOpen = false;
   };
 }
@@ -144,19 +145,19 @@ mdSidenavService.$inject = ["$mdComponentRegistry"];
  * });
  * </hljs>
  *
- * @param {expression=} md-is-open A model bound to whether the sidenav is opened.
- * @param {string=} md-component-id componentId to use with $mdSidenav service.
- * @param {expression=} md-is-locked-open When this expression evalutes to true,
+ * @param {expression=} mdIsOpen A model bound to whether the sidenav is opened.
+ * @param {string=} mdComponentId componentId to use with $mdSidenav service.
+ * @param {expression=} mdIsLockedOpen When this expression evalutes to true,
  * the sidenav 'locks open': it falls into the content's flow instead
  * of appearing over it. This overrides the `is-open` attribute.
  *
  * A $media() function is exposed to the is-locked-open attribute, which
- * can be given a media query or one of the `sm`, `gt-sm`, `md`, `gt-md`, `lg` or `gt-lg` presets.
+ * can be given a media query or one of the `sm`, `md` or `lg` presets.
  * Examples:
  *
  *   - `<md-sidenav md-is-locked-open="shouldLockOpen"></md-sidenav>`
  *   - `<md-sidenav md-is-locked-open="$media('min-width: 1000px')"></md-sidenav>`
- *   - `<md-sidenav md-is-locked-open="$media('sm')"></md-sidenav>` (locks open on small screens)
+ *   - `<md-sidenav md-is-locked-open="$media('sm')"></md-sidenav>` <!-- locks open on small screens !-->
  */
 function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $compile, $mdTheming) {
   return {
@@ -175,7 +176,7 @@ function mdSidenavDirective($timeout, $animate, $parse, $mdMedia, $mdConstant, $
   function postLink(scope, element, attr, sidenavCtrl) {
     var isLockedOpenParsed = $parse(attr.mdIsLockedOpen);
     var backdrop = $compile(
-      '<md-backdrop class="md-sidenav-backdrop md-opaque ng-enter">'
+      '<md-backdrop class="md-sidenav-backdrop md-opaque">'
     )(scope);
 
     $mdTheming.inherit(backdrop, element);
@@ -248,8 +249,13 @@ mdSidenavDirective.$inject = ["$timeout", "$animate", "$parse", "$mdMedia", "$md
  * @example $mdMedia('(min-width: 1200px)') == true if device-width >= 1200px
  * @example $mdMedia('max-width: 300px') == true if device-width <= 300px (sanitizes input, adding parens)
  */
-function mdMediaFactory($window, $mdUtil, $timeout, $mdConstant) {
+function mdMediaFactory($window, $mdUtil, $timeout) {
   var cache = $mdUtil.cacheFactory('$mdMedia', { capacity: 15 });
+  var presets = {
+    sm: '(min-width: 600px)',
+    md: '(min-width: 960px)',
+    lg: '(min-width: 1200px)'
+  };
 
   angular.element($window).on('resize', updateAll);
 
@@ -265,7 +271,7 @@ function mdMediaFactory($window, $mdUtil, $timeout, $mdConstant) {
   }
 
   function validate(query) {
-    return $mdConstant.MEDIA[query] || (
+    return presets[query] || (
       query.charAt(0) != '(' ?  ('(' + query + ')') : query
     );
   }
@@ -286,7 +292,7 @@ function mdMediaFactory($window, $mdUtil, $timeout, $mdConstant) {
   }
 
 }
-mdMediaFactory.$inject = ["$window", "$mdUtil", "$timeout", "$mdConstant"];
+mdMediaFactory.$inject = ["$window", "$mdUtil", "$timeout"];
 
 function mdComponentRegistry($log) {
   var instances = [];

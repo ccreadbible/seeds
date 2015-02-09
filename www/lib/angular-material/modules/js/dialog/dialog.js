@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v0.6.1
+ * v0.6.0-rc3-master-98c3152
  */
 (function() {
 'use strict';
@@ -260,18 +260,18 @@ function MdDialogProvider($$interimElementProvider) {
   var alertDialogMethods = ['title', 'content', 'ariaLabel', 'ok'];
 
   advancedDialogOptions.$inject = ["$mdDialog"];
-  dialogDefaultOptions.$inject = ["$timeout", "$rootElement", "$compile", "$animate", "$mdAria", "$document", "$mdUtil", "$mdConstant", "$mdTheming", "$$rAF", "$q", "$mdDialog"];
+  dialogDefaultOptions.$inject = ["$timeout", "$rootElement", "$compile", "$animate", "$mdAria", "$mdUtil", "$mdConstant", "$mdTheming", "$$rAF", "$q", "$mdDialog"];
   return $$interimElementProvider('$mdDialog')
     .setDefaults({
       methods: ['hasBackdrop', 'clickOutsideToClose', 'escapeToClose', 'targetEvent'],
       options: dialogDefaultOptions
     })
     .addPreset('alert', {
-      methods: ['title', 'content', 'ariaLabel', 'ok'],
+      methods: alertDialogMethods,
       options: advancedDialogOptions
     })
     .addPreset('confirm', {
-      methods: ['title', 'content', 'ariaLabel', 'ok', 'cancel'],
+      methods: alertDialogMethods.concat('cancel'),
       options: advancedDialogOptions
     });
 
@@ -308,7 +308,7 @@ function MdDialogProvider($$interimElementProvider) {
   }
 
   /* @ngInject */
-  function dialogDefaultOptions($timeout, $rootElement, $compile, $animate, $mdAria, $document,
+  function dialogDefaultOptions($timeout, $rootElement, $compile, $animate, $mdAria,
                                 $mdUtil, $mdConstant, $mdTheming, $$rAF, $q, $mdDialog) {
     return {
       hasBackdrop: true,
@@ -334,9 +334,9 @@ function MdDialogProvider($$interimElementProvider) {
       configureAria(element.find('md-dialog'));
 
       if (options.hasBackdrop) {
-        options.backdrop = angular.element('<md-backdrop class="md-dialog-backdrop md-opaque">');
+        options.backdrop = $compile('<md-backdrop class="md-opaque ng-enter">')(scope);
         $mdTheming.inherit(options.backdrop, options.parent);
-        $animate.enter(options.backdrop, options.parent);
+        $animate.enter(options.backdrop, options.parent, null);
       }
 
       return dialogPopIn(
@@ -385,6 +385,7 @@ function MdDialogProvider($$interimElementProvider) {
 
       if (options.backdrop) {
         $animate.leave(options.backdrop);
+        element.data('backdrop', undefined);
       }
       if (options.escapeToClose) {
         $rootElement.off('keyup', options.rootElementKeyupCallback);
@@ -392,12 +393,7 @@ function MdDialogProvider($$interimElementProvider) {
       if (options.clickOutsideToClose) {
         element.off('click', options.dialogClickOutsideCallback);
       }
-      return dialogPopOut(
-        element,
-        options.parent,
-        options.popInTarget.length && options.popInTarget
-      ).then(function() {
-        options.scope.$destroy();
+      return $animate.leave(element).then(function() {
         element.remove();
         options.popInTarget && options.popInTarget.focus();
       });
@@ -423,58 +419,45 @@ function MdDialogProvider($$interimElementProvider) {
       });
     }
 
-    function dialogPopIn(container, parentElement, clickElement) {
-      var dialogEl = container.find('md-dialog');
+    function dialogPopIn(element, parentElement, clickElement) {
+      var deferred = $q.defer();
+      parentElement.append(element);
 
-      parentElement.append(container);
-      transformToClickElement(dialogEl, clickElement);
-
-      $$rAF(function() {
-        dialogEl.addClass('transition-in')
-          .css($mdConstant.CSS.TRANSFORM, '');
-      });
-
-      return dialogTransitionEnd(dialogEl);
-    }
-    
-    function dialogPopOut(container, parentElement, clickElement) {
-      var dialogEl = container.find('md-dialog');
-
-      dialogEl.addClass('transition-out').removeClass('transition-in');
-      transformToClickElement(dialogEl, clickElement);
-
-      return dialogTransitionEnd(dialogEl);
-    }
-
-    function transformToClickElement(dialogEl, clickElement) {
+      var startPos;
       if (clickElement) {
         var clickRect = clickElement[0].getBoundingClientRect();
-        var dialogRect = dialogEl[0].getBoundingClientRect();
-
-        var scaleX = Math.min(0.5, clickRect.width / dialogRect.width);
-        var scaleY = Math.min(0.5, clickRect.height / dialogRect.height);
-
-        dialogEl.css($mdConstant.CSS.TRANSFORM, 'translate3d(' +
-          (-dialogRect.left + clickRect.left + clickRect.width/2 - dialogRect.width/2) + 'px,' +
-          (-dialogRect.top + clickRect.top + clickRect.height/2 - dialogRect.height/2) + 'px,' +
-          '0) scale(' + scaleX + ',' + scaleY + ')'
-        );
+        startPos = 'translate3d(' +
+          (clickRect.left - element[0].offsetWidth / 2) + 'px,' +
+          (clickRect.top - element[0].offsetHeight / 2) + 'px,' +
+          '0) scale(0.2)';
+      } else {
+        startPos = 'translate3d(0,100%,0) scale(0.5)';
       }
-    }
 
-    function dialogTransitionEnd(dialogEl) {
-      var deferred = $q.defer();
-      dialogEl.on($mdConstant.CSS.TRANSITIONEND, finished);
+      element
+        .css($mdConstant.CSS.TRANSFORM, startPos)
+        .css('opacity', 0);
+
+      $$rAF(function() {
+        $$rAF(function() {
+          element
+          .addClass('md-active')
+          .css($mdConstant.CSS.TRANSFORM, '')
+          .css('opacity', '')
+          .on($mdConstant.CSS.TRANSITIONEND, finished);
+        });
+      });
+
       function finished(ev) {
         //Make sure this transitionend didn't bubble up from a child
-        if (ev.target === dialogEl[0]) {
-          dialogEl.off($mdConstant.CSS.TRANSITIONEND, finished);
+        if (ev.target === element[0]) {
+          element.off($mdConstant.CSS.TRANSITIONEND, finished);
           deferred.resolve();
         }
       }
+
       return deferred.promise;
     }
-
   }
 }
 MdDialogProvider.$inject = ["$$interimElementProvider"];
