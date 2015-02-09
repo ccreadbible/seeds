@@ -3,7 +3,7 @@
 *
 * Description: disply a list of recent readings
 */
-angular.module('seeds.main.readings', [])
+angular.module('seeds.main.readings', ['seeds.main.bible'])
 .config(function($stateProvider) {
   $stateProvider
     .state('seeds.main.readings', {

@@ -1,8 +1,52 @@
+body,
+html {
+  color: #212121;
+}
 h1 {
   font-size: 1.4em;
 }
-.title {
-  text-align: center;
+.title,
+.bar-header .button,
+ion-header-bar i {
+  color: #fff;
+}
+ion-header-bar {
+  height: 56px;
+  color: #fff;
+}
+.bar-header {
+  border: 0;
+}
+.has-long-header {
+  top: 30vh;
+}
+ion-side-menu ion-content,
+ion-side-menu ion-content .item-complex a.item-content {
+  background-color: #c6c6c6;
+}
+.dark-primary-color {
+  background: #0097a7;
+}
+.default-primary-color {
+  background: #00bcd4;
+}
+.light-primary-color {
+  background: #b2ebf2;
+}
+.text-primary-color {
+  color: #fff;
+}
+.accent-color {
+  background: #ff9800;
+}
+.primary-text-color {
+  color: #212121;
+}
+.secondary-text-color {
+  color: #727272;
+}
+.divider-color {
+  border-color: #b6b6b6;
 }
 div.buttons {
   margin: 5px;
@@ -26,6 +70,73 @@ div.buttons {
   font-size: 1.4em;
   color: #808080;
 }
+ion-view.readings-view.pane {
+  top: 3vh;
+}
+.top-header {
+  height: 3vh;
+}
+ion-view.readings-view .long-header {
+  height: 30vh;
+  width: 100%;
+}
+ion-view.readings-view .long-header .title {
+  top: 19vh;
+  font-size: 1.8rem;
+  text-align: center;
+}
+md-tabs.md-default-theme section.md-header {
+  background-color: #f4f4f4;
+  border-top: 1px rgba(128,128,128,0.24) solid;
+}
+md-tabs.md-default-theme md-tab.active {
+  color: #ff9800;
+}
+md-tabs.md-default-theme md-tab {
+  color: #727272;
+}
+md-tabs.md-default-theme md-tabs-ink-bar {
+  color: #ff9800;
+  background: #ff9800;
+}
+md-tab[aria-selected="true"] {
+  border: 0;
+}
+md-tab .scroll-view {
+  position: absolute;
+  top: 4em;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
 .content-wrapper {
-  padding: 0 4%;
+  padding: 0 4% 6em;
+}
+.bible-view .bar-footer {
+  display: none;
+  background-color: #f4f4f4;
+}
+.bible-view .bar-footer button {
+  color: #ff9800;
+}
+ion-view.main-view ion-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+ion-view.main-view .wrapper {
+  width: 80%;
+  position: absolute;
+  left: 50%;
+  margin: 10% 0 0 -40%;
+}
+ion-view.main-view section {
+  border: 2px solid #fff;
+  height: 80px;
+  margin: 4% auto;
+}
+ion-view.main-view section h1 {
+  color: #fff;
+  text-align: center;
+  font: 3em/80px Helvetica, sans-serif;
 }

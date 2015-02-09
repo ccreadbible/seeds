@@ -22,8 +22,8 @@ angular.module('seeds', [
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
-    
+.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+  $ionicConfigProvider.backButton.previousTitleText(false).text('');
   $stateProvider
     .state('seeds', {
       abstract: true,
