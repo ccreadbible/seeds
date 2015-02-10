@@ -79,7 +79,12 @@ ion-view.readings-view .long-header {
 }
 ion-view.readings-view .long-header .title {
   font-size: 1.8rem;
-  text-align: center;
+  margin-bottom: 10px;
+}
+ion-view.readings-view .long-header .sub-title {
+  color: #b2ebf2;
+  margin: 0;
+  width: 60%;
 }
 md-tabs.md-default-theme section.md-header {
   background-color: #f4f4f4;
