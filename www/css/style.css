@@ -18,7 +18,7 @@ ion-header-bar {
   border: 0;
 }
 .has-long-header {
-  top: 30vh;
+  top: 31vh;
 }
 ion-side-menu ion-content,
 ion-side-menu ion-content .item-complex a.item-content {
@@ -70,11 +70,8 @@ div.buttons {
   font-size: 1.4em;
   color: #808080;
 }
-ion-view.readings-view.pane {
-  top: 3vh;
-}
-.top-header {
-  height: 3vh;
+ion-view.readings-view .bottom-header {
+  height: 1vh;
 }
 ion-view.readings-view .long-header {
   height: 30vh;
@@ -117,6 +114,9 @@ md-tab .scroll-view {
 }
 .bible-view .bar-footer button {
   color: #ff9800;
+}
+.bible-view button span {
+  font-size: 1.5em;
 }
 ion-view.main-view ion-content {
   width: 100%;

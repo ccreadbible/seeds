@@ -16,8 +16,7 @@ angular.module('seeds.main.bible', [])
       }
     });
 })
-.controller('BibleCtrl', function($scope, $actions, $store, 
-  $stateParams, $timeout){
+.controller('BibleCtrl', function($scope, $actions, $store, $stateParams){
   $store.bindTo($scope, function(){
     $scope.reading = $store.getReading($stateParams.bibleId);
     angular.element("section").css('font-size', $store.getFontSize());
@@ -35,5 +34,4 @@ angular.module('seeds.main.bible', [])
   this.hideSettings = function() {
     angular.element(".bible-view .bar-footer").slideUp();
   };
-
 });

@@ -6877,7 +6877,7 @@ a.button {
 .platform-ios.platform-cordova:not(.fullscreen) .long-header .bar-header:not(.bar-subheader) {
   height: 30vh; } /*custom*/
 .platform-ios.platform-cordova:not(.fullscreen) .has-long-header {
-  top: 30vh; } /*custom*/
+  top: 31vh; } /*custom*/
 .platform-ios.platform-cordova:not(.fullscreen) .has-subheader {
   top: 108px; }
 .platform-ios.platform-cordova:not(.fullscreen) .has-tabs-top {
