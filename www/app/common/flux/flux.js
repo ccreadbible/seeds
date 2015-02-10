@@ -4,7 +4,8 @@ angular.module('seeds.common.flux',[])
       'loadReadings',
       'loadHomilyList',
       'createAudioObj',
-      'resizeFont'
+      'resizeFont',
+      'textToSpeech'
     ]);
   })
   .factory('$store', function(flux, $actions, $http, URLS){
@@ -14,13 +15,15 @@ angular.module('seeds.common.flux',[])
       homily: [],
       audio: undefined,
       lastPlay: 0,
-      fontSize: 12,
+      fontSize: 15,
+      ttsStatus: 'stop',
 
       actions:[
         $actions.loadReadings,
         $actions.loadHomilyList,
         $actions.createAudioObj,
-        $actions.resizeFont
+        $actions.resizeFont,
+        $actions.textToSpeech
       ],
 
       loadReadings: function(){
@@ -63,13 +66,29 @@ angular.module('seeds.common.flux',[])
       },
 
       resizeFont: function(option) {
-        if(this.fontSize === 10 && option === 0 ||
+        if(this.fontSize === 12 && option === 0 ||
            this.fontSize === 28 && option === 1)
           return;
         if(option === 0) //decrease size
           this.fontSize -= 1;
         else
           this.fontSize += 1;
+      },
+
+      textToSpeech: function(text) {
+        this.audio = new SpeechSynthesisUtterance();
+        if(!text){
+          speechSynthesis.cancel();
+          this.ttsStatus = 'stop';
+        }else{
+          this.audio.text = text;
+          this.audio.lang = 'zh-TW';
+          this.audio.rate = 0.8;
+          this.audio.onend = function(){console.log('done');}
+          speechSynthesis.speak(this.audio);
+          this.ttsStatus = 'playing';
+        }
+
       },
 
       exports:{
@@ -111,6 +130,10 @@ angular.module('seeds.common.flux',[])
 
         getFontSize: function() {
           return this.fontSize;
+        },
+
+        getTTSStatus: function() {
+          return this.ttsStatus;
         }
 
       }

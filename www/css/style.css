@@ -108,6 +108,15 @@ md-tab .scroll-view {
 .content-wrapper {
   padding: 0 4% 6em;
 }
+.content-wrapper > section {
+  margin-top: 5%;
+}
+.tts-btn {
+  background-color: rgba(255,152,0,0.77);
+  position: fixed;
+  top: 100px;
+  right: 3%;
+}
 .bible-view .bar-footer {
   display: none;
   background-color: #f4f4f4;

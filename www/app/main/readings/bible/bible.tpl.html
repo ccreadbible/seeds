@@ -3,6 +3,9 @@
   <ion-content scroll="false" class="has-header">
     <md-tabs md-selected="selectedIndex" class="md-accent">
       <md-tab ng-disabled="tab.disabled" label="讀經一">
+        <md-button class="md-fab tts-btn" aria-label="voice" ng-click="bible.textToSpeech(0)">
+          <img src="img/headphones.svg">
+        </md-button>
         <ion-scroll style="height: 90vh" on-swipe-down="bible.showSettings()"
           on-swipe-up="bible.hideSettings()">
           <div class="content-wrapper" layout="column" layout-fill layout-align="space-around center">
@@ -11,6 +14,9 @@
         </ion-scroll>
       </md-tab>
       <md-tab ng-disabled="tab.disabled" label="福音">
+        <md-button class="md-fab tts-btn" aria-label="voice" ng-click="bible.textToSpeech(1)">
+          <img src="img/headphones.svg">
+        </md-button>
         <ion-scroll style="height: 90vh" on-swipe-down="bible.showSettings()"
           on-swipe-up="bible.hideSettings()">
           <div class="content-wrapper" layout="column" layout-fill layout-align="space-around center">
