@@ -1,4 +1,7 @@
-angular.module('seeds.common.flux',[])
+angular.module('seeds.common.flux',[
+  'seeds.common.mixins.homily',
+  'seeds.common.mixins.readings'
+  ])
   .factory('$actions', function(flux){
     return flux.actions([
       'loadReadings',
@@ -8,87 +11,21 @@ angular.module('seeds.common.flux',[])
       'textToSpeech'
     ]);
   })
-  .factory('$store', function(flux, $actions, $http, URLS){
+  .factory('$store', function(flux, $actions, 
+    HomilyMixin, ReadingsMixin){
+
     return flux.store({
-      readings: [],
-      media: [],
-      homily: [],
+      mixins: [homilyMixin, ReadingsMixin],
       audio: undefined,
       lastPlay: 0,
-      fontSize: 15,
-      ttsStatus: 'stop',
-
+      
       actions:[
-        $actions.loadReadings,
-        $actions.loadHomilyList,
         $actions.createAudioObj,
-        $actions.resizeFont,
-        $actions.textToSpeech
       ],
 
-      loadReadings: function(){
-        var self = this;
-
-        $http({
-          method: 'GET',
-          url: URLS.api + '/readings'
-        }).then(function(res){
-          self.readings = res.data.verses;
-          self.emitChange();
-        });
-      },
-
-      resizeFont: function(option) {
-        if(this.fontSize === 10 && option === 0 ||
-           this.fontSize === 28 && option === 1)
-          return;
-        if(option === 0) //decrease size
-          this.fontSize -= 1;
-        else
-          this.fontSize += 1;
-      },
-
-      loadHomilyList:function(){
-        var self = this;
-
-        $http({
-          method: 'GET',
-          url: URLS.api + '/homily'
-        }).then(function(res){
-
-          self.homily = res.data.homily;
-          self.emitChange();
-        });
-      },
-
+      
       createAudioObj: function(){
         this.audio = new Audio();
-      },
-
-      resizeFont: function(option) {
-        if(this.fontSize === 12 && option === 0 ||
-           this.fontSize === 28 && option === 1)
-          return;
-        if(option === 0) //decrease size
-          this.fontSize -= 1;
-        else
-          this.fontSize += 1;
-      },
-
-      textToSpeech: function(text) {
-        this.audio = new SpeechSynthesisUtterance();
-        if(!text){
-          speechSynthesis.cancel();
-          this.ttsStatus = 'stop';
-        }else{
-          this.audio.text = text;
-          this.audio.lang = 'zh-TW';
-          this.audio.rate = 0.8;
-          this.audio.onend = function(){console.log('done');}
-          speechSynthesis.speak(this.audio);
-          this.ttsStatus = 'playing';
-        }
-
       },
 
       exports:{
@@ -98,10 +35,6 @@ angular.module('seeds.common.flux',[])
 
         getReading: function(id){
           return this.readings[id];
-        },
-
-        getMedia: function(){
-          return this.media;
         },
 
         getHomilyList: function(){
