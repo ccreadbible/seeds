@@ -11,21 +11,31 @@ angular.module('seeds.main.homilyList', [])
       views: {
         'menuContent': {
           templateUrl: 'app/main/homilyList/homilyList.tpl.html',
-          controller: 'HomilyListCtrol'
+          controller: 'HomilyListCtrol as homily'
         }
       }
     });
 })
 .controller('HomilyListCtrol', function($scope, $actions, $store){
   $actions.createAudioObj();
-  console.log('created audio');
   $actions.loadHomilyList();
 
   $store.bindTo($scope, function(){
     $scope.homilyList = $store.getHomilyList();
-    $scope.playAudio = $store.playAudio;
-    $scope.stopAudio = $store.stopAudio;
-    $scope.pauseAudio = $store.pauseAudio;
-
   });
+
+  this.playAudio = function(id){
+    $actions.playAudio(id);
+    angular.element(".homily-view ion-footer-bar").slideDown();
+  };
+
+  this.pauseAudio = function(){
+    $actions.pauseAudio();
+  };
+
+  this.stopAudio = function(){
+    $actions.stopAudio();
+    angular.element(".homily-view ion-footer-bar").slideUp();
+  };
 });
+

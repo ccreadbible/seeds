@@ -8,7 +8,10 @@ angular.module('seeds.common.flux',[
       'loadHomilyList',
       'createAudioObj',
       'resizeFont',
-      'textToSpeech'
+      'textToSpeech',
+      'playAudio',
+      'pauseAudio',
+      'stopAudio'
     ]);
   })
   .factory('$store', function(flux, $actions, 
@@ -21,11 +24,35 @@ angular.module('seeds.common.flux',[
       
       actions:[
         $actions.createAudioObj,
+        $actions.playAudio,
+        $actions.pauseAudio,
+        $actions.stopAudio
       ],
 
       
       createAudioObj: function(){
         this.audio = new Audio();
+      },
+
+      playAudio: function(id){
+        if(id === undefined){
+          id = this.lastPlay;
+        }else{
+          this.audio.src = this.homily[id].link;
+          this.lastPlay = id;
+        }
+        console.log(this.audio.src);
+        this.audio.play();
+      },
+
+      pauseAudio: function(){
+        this.audio.pause();
+      },
+
+      stopAudio: function(){
+        this.audio.pause();
+        // console.log(this.audio.currentTime);
+        this.audio.currentTime = 0.0;
       },
 
       exports:{
@@ -41,25 +68,6 @@ angular.module('seeds.common.flux',[
           return this.homily;
         },
 
-        playAudio: function(id){
-          if(id === undefined){
-            id = this.lastPlay;
-          }else{
-            this.audio.src = this.homily[id].link;
-            this.lastPlay = id;
-          }
-          this.audio.play();
-        },
-
-        pauseAudio: function(){
-          this.audio.pause();
-        },
-
-        stopAudio: function(){
-          this.audio.pause();
-          console.log(this.audio.currentTime);
-          this.audio.currentTime = 0.0;
-        },
 
         getFontSize: function() {
           return this.fontSize;

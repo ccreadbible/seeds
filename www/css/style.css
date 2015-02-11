@@ -5,6 +5,17 @@ html {
 h1 {
   font-size: 1.4em;
 }
+.bottom-header {
+  height: 1vh;
+}
+.long-header {
+  height: 30vh;
+  width: 100%;
+}
+.long-header .title {
+  font-size: 1.8rem;
+  text-align: center;
+}
 .title,
 .bar-header .button,
 ion-header-bar i {
@@ -48,6 +59,9 @@ ion-side-menu ion-content .item-complex a.item-content {
 .divider-color {
   border-color: #b6b6b6;
 }
+.footer-color {
+  background: #f4f4f4;
+}
 div.buttons {
   margin: 5px;
 }
@@ -55,8 +69,9 @@ div.buttons {
 .ion-stop.button,
 .ion-pause.button {
   font-size: 2em;
+  background-color: #8ecdd5;
   border-color: transparent;
-  color: rgba(255,255,255,0.89);
+  color: #7a4e4e;
 }
 .ion-play.button:hover,
 .ion-stop.button:hover,
@@ -65,21 +80,31 @@ div.buttons {
 }
 .play-status {
   float: right;
-  background-color: transparent;
-  border-color: transparent;
+  background-color: #8ecdd5;
+  border-color: #8ecdd5;
   font-size: 1.4em;
   color: #808080;
 }
-ion-view.readings-view .bottom-header {
-  height: 1vh;
+#play {
+  position: absolute;
+  top: 26vh;
+  right: 5%;
 }
-ion-view.readings-view .long-header {
-  height: 30vh;
-  width: 100%;
+.homily-view ion-footer-bar {
+  display: none;
 }
-ion-view.readings-view .long-header .title {
-  font-size: 1.8rem;
+.homily-view ion-footer-bar .buttons {
+  margin-top: 0;
+  float: right;
+}
+.readings-view .long-header h4 {
+  margin: 0;
+  width: 60%;
+  color: #b2ebf2;
   text-align: center;
+}
+.readings-view .long-header h1 {
+  margin-bottom: 10px;
 }
 md-tabs.md-default-theme section.md-header {
   background-color: #f4f4f4;

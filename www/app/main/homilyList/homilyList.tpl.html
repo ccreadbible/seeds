@@ -1,27 +1,31 @@
-<ion-view view-title="講道音頻">
-  <ion-content>
-    <!-- <audio controls>
-      <source src='http://www.ccreadbible.info/media/com_podcastmanager/2014homily/20141222.mp3' type="audio/mpeg">
-      Your browser does not support the audio element.
-    </audio> -->
+<ion-view class="homily-view" view-title="">
+  <div class="long-header default-primary-color" layout="row" layout-align="center center">
+    <h1 class="title">講道音頻</h1>
+  </div>
+  <div class="bottom-header dark-primary-color"></div>
+  <md-button id="play" class="md-fab accent-color text-primary-color " aria-label="play" ng-click="homily.playAudio()">播放</md-button>
 
-    <ion-list>
-      <ion-item ng-repeat="homily in homilyList">
-        {{homily.month}} 月 {{homily.date}} 日
-        <button class='ion-play play-status' ng-click="playAudio({{$index}})"></button>
+  <ion-content class="has-long-header">
+    <ion-list can-swipe="true">
+      <ion-item ng-repeat="item in homilyList" ng-click="homily.playAudio({{$index}})">
+        {{item.month}} 月 {{item.date}} 日
+        <!-- <button class='ion-play play-status' ng-click="playAudio({{$index}})"></button> -->
+        <ion-option-button class="accent-color"
+                       ng-click="">閱讀
+        </ion-option-button>
       </ion-item>
     </ion-list>
   </ion-content>
   
-  <ion-footer-bar class="bar-assertive">
-      <div class="buttons" ng-click="playAudio()">
+  <ion-footer-bar class="footer-color">
+      <!-- <div class="buttons" ng-click="playAudio()">
         <div class="ion-play button"></div>
+      </div> -->
+      <div class="buttons" layout="row" layout-align="center center">
+        <div class="ion-pause button" ng-click="homily.pauseAudio()"></div>
+        <div class="ion-stop button" ng-click="homily.stopAudio()"></div>
       </div>
-      <div class="buttons" ng-click="pauseAudio()">
-        <div class="ion-pause button"></div>
-      </div>
-      <div class="buttons">
-        <button class="ion-stop button" ng-click="stopAudio()"></button>
-      </div>
+      <!-- <div class="buttons" > -->
+      <!-- </div> -->
 </ion-footer-bar>
 </ion-view>
