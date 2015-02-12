@@ -36,16 +36,4 @@ angular.module('seeds.main.bible', [])
     angular.element(".bible-view .bar-footer").slideUp();
   };
 
-  this.textToSpeech = function(option) {
-    console.log('ststus',$store.getTTSStatus());
-    if($store.getTTSStatus() === 'stop'){
-      var text;
-      /*0: reading1, 1: gospel*/
-      (option === 0)? text = $scope.reading.origin_reading1 : 
-        text = $scope.reading.origin_gospel;
-      $actions.textToSpeech(text);
-    }else{
-      $actions.textToSpeech();
-    }
-  };
 });

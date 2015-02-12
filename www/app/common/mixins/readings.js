@@ -9,7 +9,6 @@ angular.module('seeds.common.mixins.readings', [])
       actions: [
         $actions.loadReadings,
         $actions.resizeFont,
-        $actions.textToSpeech
       ],
 
       loadReadings: function(){
@@ -32,24 +31,7 @@ angular.module('seeds.common.mixins.readings', [])
           this.fontSize -= 1;
         else
           this.fontSize += 1;
-      },
-
-      textToSpeech: function(text) {
-        this.audio = new SpeechSynthesisUtterance();
-        if(!text){
-          speechSynthesis.cancel();
-          this.ttsStatus = 'stop';
-        }else{
-          this.audio.text = text;
-          this.audio.lang = 'zh-TW';
-          this.audio.rate = 0.8;
-          this.audio.onend = function(){this.ttsStatus = 'stop';}
-          speechSynthesis.speak(this.audio);
-          this.ttsStatus = 'playing';
-        }
-
       }
-
     };
 
   });
