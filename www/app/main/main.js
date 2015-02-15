@@ -17,7 +17,21 @@ angular.module('seeds.main', [
       controller: 'MainCtrl as main'
     });
 })
-.controller('MainCtrl', function($scope){
+.controller('MainCtrl', function($scope, $actions, $store){
+  $actions.loadReadings(); 
+  $actions.loadHomilyList();
 
-  
+  this.pauseAudio = function(){
+    $actions.pauseAudio();
+  };
+
+  this.stopAudio = function(){
+    $actions.stopAudio();
+    angular.element("ion-side-menu-content > ion-footer-bar").slideUp();
+  };
+
+  this.playAudio = function(id){
+    $actions.playAudio(id);
+  };
+
 });

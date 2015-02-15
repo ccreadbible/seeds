@@ -31,6 +31,12 @@ ion-header-bar {
 .has-long-header {
   top: 31vh;
 }
+ion-side-menu-content ion-footer-bar.audio-bar {
+  display: none;
+}
+ion-side-menu-content ion-footer-bar .buttons {
+  margin-top: 0;
+}
 ion-side-menu ion-content,
 ion-side-menu ion-content .item-complex a.item-content {
   background-color: #c6c6c6;
@@ -62,16 +68,14 @@ ion-side-menu ion-content .item-complex a.item-content {
 .footer-color {
   background: #f4f4f4;
 }
-div.buttons {
-  margin: 5px;
-}
 .ion-play.button,
 .ion-stop.button,
 .ion-pause.button {
   font-size: 2em;
+  margin-right: 5px;
   background-color: #8ecdd5;
   border-color: transparent;
-  color: #7a4e4e;
+  color: #565f61;
 }
 .ion-play.button:hover,
 .ion-stop.button:hover,
@@ -87,15 +91,17 @@ div.buttons {
 }
 #play {
   position: absolute;
-  top: 26vh;
-  right: 5%;
+  top: 20vh;
+  right: 50%;
+  margin-right: -26px;
 }
-.homily-view ion-footer-bar {
+ion-item span.ion-volume-medium {
+  float: right;
+  font-size: 1.5em;
   display: none;
 }
-.homily-view ion-footer-bar .buttons {
-  margin-top: 0;
-  float: right;
+ion-item.active span.ion-volume-medium {
+  display: inline;
 }
 .readings-view .long-header h4 {
   margin: 0;
@@ -136,6 +142,9 @@ md-tab .scroll-view {
 .content-wrapper > section {
   margin-top: 5%;
 }
+.content-wrapper > section > p {
+  text-align: justify;
+}
 .tts-btn {
   background-color: rgba(255,152,0,0.77);
   position: fixed;
@@ -151,6 +160,22 @@ md-tab .scroll-view {
 }
 .bible-view button span {
   font-size: 1.5em;
+}
+.font-size-sec {
+  position: fixed;
+  top: auto;
+  right: 4%;
+  margin-top: 5%;
+  font-size: 1rem;
+}
+.small-btn,
+.big-btn {
+  border: 1px solid #ff9800;
+  color: #ff9800;
+  background-color: transparent;
+}
+.big-btn {
+  border-right: 0;
 }
 ion-view.main-view ion-content {
   width: 100%;

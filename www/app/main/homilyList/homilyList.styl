@@ -1,13 +1,11 @@
-div.buttons 
-  margin 5px
-
 .ion-play.button
 .ion-stop.button
 .ion-pause.button
   font-size 2em
+  margin-right 5px
   background-color #8ECDD5
   border-color transparent
-  color rgb(122, 78, 78)
+  color #565F61
   &:hover
     color #fff
     
@@ -20,12 +18,14 @@ div.buttons
 
 #play
   position absolute
-  top 26vh
-  right 5%
+  top 20vh
+  right 50%
+  margin-right -26px
 
-.homily-view ion-footer-bar 
+ion-item span.ion-volume-medium
+  float right
+  font-size 1.5em
   display none
 
-.homily-view ion-footer-bar .buttons
-  margin-top 0
-  float right
+ion-item.active span.ion-volume-medium
+  display inline

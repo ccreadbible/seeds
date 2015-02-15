@@ -16,26 +16,26 @@ angular.module('seeds.main.homilyList', [])
       }
     });
 })
-.controller('HomilyListCtrol', function($scope, $actions, $store){
+.controller('HomilyListCtrol', function($scope, $actions, $store, $state){
   $actions.createAudioObj();
-  $actions.loadHomilyList();
 
   $store.bindTo($scope, function(){
     $scope.homilyList = $store.getHomilyList();
   });
 
-  this.playAudio = function(id){
+  var selected = null;
+  this.playAudio = function(id, item){
+    selected = item;
     $actions.playAudio(id);
-    angular.element(".homily-view ion-footer-bar").slideDown();
+    angular.element("ion-side-menu-content ion-footer-bar").slideDown();
   };
 
-  this.pauseAudio = function(){
-    $actions.pauseAudio();
+  this.openBible = function(id){
+    $state.go('seeds.main.bible', {'bibleId':id});
   };
 
-  this.stopAudio = function(){
-    $actions.stopAudio();
-    angular.element(".homily-view ion-footer-bar").slideUp();
+  this.isSelected = function(item){
+    return selected === item;
   };
 });
 
