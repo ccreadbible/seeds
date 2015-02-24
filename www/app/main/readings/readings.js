@@ -17,8 +17,6 @@ angular.module('seeds.main.readings', ['seeds.main.bible'])
     });
 })
 .controller('ReadingsCtrl', function($scope, $actions, $store) {
-  
-  $actions.loadReadings();
     
   $store.bindTo($scope, function(){
     $scope.readings = $store.getReadings();

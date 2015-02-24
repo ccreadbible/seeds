@@ -1,10 +1,13 @@
 <ion-view class="bible-view" view-title="{{reading.date}}">
-    <!-- <h1 ng-model="reading.date">{{reading.date}}</h1> -->
   <ion-content scroll="false" class="has-header">
     <md-tabs md-selected="selectedIndex" class="md-accent">
       <md-tab ng-disabled="tab.disabled" label="讀經一">
         <ion-scroll style="height: 90vh" on-swipe-down="bible.showSettings()"
           on-swipe-up="bible.hideSettings()">
+          <div class="font-size-sec" layout="row" layout-align="end center">
+            <button class="big-btn" ng-click="bible.resizeFont(1)">大</button>
+            <button class="small-btn" ng-click="bible.resizeFont(0)">小</button>
+          </div>
           <div class="content-wrapper" layout="column" layout-fill layout-align="space-around center">
             <section class='reading-content' ng-bind-html='reading.reading1'></section>
           </div>
@@ -13,18 +16,15 @@
       <md-tab ng-disabled="tab.disabled" label="福音">
         <ion-scroll style="height: 90vh" on-swipe-down="bible.showSettings()"
           on-swipe-up="bible.hideSettings()">
+          <div class="font-size-sec" layout="row" layout-align="end center">
+            <button class="big-btn" ng-click="bible.resizeFont(1)">大</button>
+            <button class="small-btn" ng-click="bible.resizeFont(0)">小</button>
+          </div>
           <div class="content-wrapper" layout="column" layout-fill layout-align="space-around center">
             <section class='reading-content' ng-bind-html='reading.gospel'></section>
           </div>
         </ion-scroll>
       </md-tab>
-
     </md-tabs>
-    <div class="bar bar-footer">
-      <div layout="row" layout-align="space-around center">
-        <md-button ng-click="bible.resizeFont(1)">大</md-button>
-        <md-button ng-click="bible.resizeFont(0)">小</md-button>
-      </div>
-    </div>
   </ion-content>
 </ion-view>

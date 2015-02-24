@@ -3384,10 +3384,10 @@ md-bottom-sheet.md-default-theme {
   .md-button.md-default-theme.md-warn {
     color: #ef5350;
     fill: #ef5350; }
-  .md-button.md-default-theme.md-raised, .md-button.md-default-theme.md-fab {
-    background-color: rgba(158, 158, 158, 0.185); }
+  /*.md-button.md-default-theme.md-raised, .md-button.md-default-theme.md-fab {
+    background-color: rgba(158, 158, 158, 0.185); } custom*/
     .md-button.md-default-theme.md-raised:not([disabled]):hover, .md-button.md-default-theme.md-raised:not([disabled]):focus, .md-button.md-default-theme.md-fab:not([disabled]):hover, .md-button.md-default-theme.md-fab:not([disabled]):focus {
-      background-color: rgba(158, 158, 158, 0.3); }
+      background-color: rgba(255, 64, 129, 0.88); } /*custom*/
     .md-button.md-default-theme.md-raised.md-primary, .md-button.md-default-theme.md-fab.md-primary {
       color: white;
       background-color: #03a9f4; }

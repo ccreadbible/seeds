@@ -11,21 +11,31 @@ angular.module('seeds.main.homilyList', [])
       views: {
         'menuContent': {
           templateUrl: 'app/main/homilyList/homilyList.tpl.html',
-          controller: 'HomilyListCtrol'
+          controller: 'HomilyListCtrol as homily'
         }
       }
     });
 })
-.controller('HomilyListCtrol', function($scope, $actions, $store){
+.controller('HomilyListCtrol', function($scope, $actions, $store, $state){
   $actions.createAudioObj();
-  console.log('created audio');
-  $actions.loadHomilyList();
 
   $store.bindTo($scope, function(){
     $scope.homilyList = $store.getHomilyList();
-    $scope.playAudio = $store.playAudio;
-    $scope.stopAudio = $store.stopAudio;
-    $scope.pauseAudio = $store.pauseAudio;
-
   });
+
+  var selected = null;
+  this.playAudio = function(id, item){
+    selected = item;
+    $actions.playAudio(id);
+    angular.element("ion-side-menu-content ion-footer-bar").slideDown();
+  };
+
+  this.openBible = function(id){
+    $state.go('seeds.main.bible', {'bibleId':id});
+  };
+
+  this.isSelected = function(item){
+    return selected === item;
+  };
 });
+

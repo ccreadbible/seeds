@@ -1,75 +1,58 @@
-angular.module('seeds.common.flux',[])
+angular.module('seeds.common.flux',[
+  'seeds.common.mixins.homily',
+  'seeds.common.mixins.readings'
+  ])
   .factory('$actions', function(flux){
     return flux.actions([
       'loadReadings',
       'loadHomilyList',
       'createAudioObj',
-      'resizeFont'
+      'resizeFont',
+      'textToSpeech',
+      'playAudio',
+      'pauseAudio',
+      'stopAudio'
     ]);
   })
-  .factory('$store', function(flux, $actions, $http, URLS){
+  .factory('$store', function(flux, $actions, 
+    HomilyMixin, ReadingsMixin){
+
     return flux.store({
-      readings: [],
-      media: [],
-      homily: [],
+      mixins: [homilyMixin, ReadingsMixin],
       audio: undefined,
       lastPlay: 0,
-      fontSize: 12,
-
+      
       actions:[
-        $actions.loadReadings,
-        $actions.loadHomilyList,
         $actions.createAudioObj,
-        $actions.resizeFont
+        $actions.playAudio,
+        $actions.pauseAudio,
+        $actions.stopAudio
       ],
 
-      loadReadings: function(){
-        var self = this;
-
-        $http({
-          method: 'GET',
-          url: URLS.api + '/readings'
-        }).then(function(res){
-          self.readings = res.data.verses;
-          self.emitChange();
-        });
-      },
-
-      resizeFont: function(option) {
-        if(this.fontSize === 10 && option === 0 ||
-           this.fontSize === 28 && option === 1)
-          return;
-        if(option === 0) //decrease size
-          this.fontSize -= 1;
-        else
-          this.fontSize += 1;
-      },
-
-      loadHomilyList:function(){
-        var self = this;
-
-        $http({
-          method: 'GET',
-          url: URLS.api + '/homily'
-        }).then(function(res){
-
-          self.homily = res.data.homily;
-          self.emitChange();
-        });
-      },
-
+      
       createAudioObj: function(){
         this.audio = new Audio();
       },
 
-      resizeFont: function(option) {
-        if(this.fontSize === 10 && option === 0 ||
-           this.fontSize === 28 && option === 1)
-          return;
-        if(option === 0) //decrease size
-          this.fontSize -= 1;
-        else
-          this.fontSize += 1;
+      playAudio: function(id){
+        if(id === undefined){
+          id = this.lastPlay;
+        }else{
+          this.audio.src = this.homily[id].link;
+          this.lastPlay = id;
+        }
+        console.log(this.audio.src);
+        this.audio.play();
+      },
+
+      pauseAudio: function(){
+        this.audio.pause();
+      },
+
+      stopAudio: function(){
+        this.audio.pause();
+        // console.log(this.audio.currentTime);
+        this.audio.currentTime = 0.0;
       },
 
       exports:{
@@ -81,36 +64,17 @@ angular.module('seeds.common.flux',[])
           return this.readings[id];
         },
 
-        getMedia: function(){
-          return this.media;
-        },
-
         getHomilyList: function(){
           return this.homily;
         },
 
-        playAudio: function(id){
-          if(id === undefined){
-            id = this.lastPlay;
-          }else{
-            this.audio.src = this.homily[id].link;
-            this.lastPlay = id;
-          }
-          this.audio.play();
-        },
-
-        pauseAudio: function(){
-          this.audio.pause();
-        },
-
-        stopAudio: function(){
-          this.audio.pause();
-          console.log(this.audio.currentTime);
-          this.audio.currentTime = 0.0;
-        },
 
         getFontSize: function() {
           return this.fontSize;
+        },
+
+        getTTSStatus: function() {
+          return this.ttsStatus;
         }
 
       }

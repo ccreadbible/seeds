@@ -5,6 +5,17 @@ html {
 h1 {
   font-size: 1.4em;
 }
+.bottom-header {
+  height: 1vh;
+}
+.long-header {
+  height: 30vh;
+  width: 100%;
+}
+.long-header .title {
+  font-size: 1.8rem;
+  text-align: center;
+}
 .title,
 .bar-header .button,
 ion-header-bar i {
@@ -19,6 +30,12 @@ ion-header-bar {
 }
 .has-long-header {
   top: 31vh;
+}
+ion-side-menu-content ion-footer-bar.audio-bar {
+  display: none;
+}
+ion-side-menu-content ion-footer-bar .buttons {
+  margin-top: 0;
 }
 ion-side-menu ion-content,
 ion-side-menu ion-content .item-complex a.item-content {
@@ -48,15 +65,17 @@ ion-side-menu ion-content .item-complex a.item-content {
 .divider-color {
   border-color: #b6b6b6;
 }
-div.buttons {
-  margin: 5px;
+.footer-color {
+  background: #f4f4f4;
 }
 .ion-play.button,
 .ion-stop.button,
 .ion-pause.button {
   font-size: 2em;
+  margin-right: 5px;
+  background-color: #8ecdd5;
   border-color: transparent;
-  color: rgba(255,255,255,0.89);
+  color: #565f61;
 }
 .ion-play.button:hover,
 .ion-stop.button:hover,
@@ -65,26 +84,33 @@ div.buttons {
 }
 .play-status {
   float: right;
-  background-color: transparent;
-  border-color: transparent;
+  background-color: #8ecdd5;
+  border-color: #8ecdd5;
   font-size: 1.4em;
   color: #808080;
 }
-ion-view.readings-view .bottom-header {
-  height: 1vh;
+#play {
+  position: absolute;
+  top: 20vh;
+  right: 50%;
+  margin-right: -26px;
 }
-ion-view.readings-view .long-header {
-  height: 30vh;
-  width: 100%;
+ion-item span.ion-volume-medium {
+  float: right;
+  font-size: 1.5em;
+  display: none;
 }
-ion-view.readings-view .long-header .title {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+ion-item.active span.ion-volume-medium {
+  display: inline;
 }
-ion-view.readings-view .long-header .sub-title {
-  color: #b2ebf2;
+.readings-view .long-header h4 {
   margin: 0;
   width: 60%;
+  color: #b2ebf2;
+  text-align: center;
+}
+.readings-view .long-header h1 {
+  margin-bottom: 10px;
 }
 md-tabs.md-default-theme section.md-header {
   background-color: #f4f4f4;
@@ -113,6 +139,18 @@ md-tab .scroll-view {
 .content-wrapper {
   padding: 0 4% 6em;
 }
+.content-wrapper > section {
+  margin-top: 5%;
+}
+.content-wrapper > section > p {
+  text-align: justify;
+}
+.tts-btn {
+  background-color: rgba(255,152,0,0.77);
+  position: fixed;
+  top: 100px;
+  right: 3%;
+}
 .bible-view .bar-footer {
   display: none;
   background-color: #f4f4f4;
@@ -122,6 +160,22 @@ md-tab .scroll-view {
 }
 .bible-view button span {
   font-size: 1.5em;
+}
+.font-size-sec {
+  position: fixed;
+  top: auto;
+  right: 4%;
+  margin-top: 5%;
+  font-size: 1rem;
+}
+.small-btn,
+.big-btn {
+  border: 1px solid #ff9800;
+  color: #ff9800;
+  background-color: transparent;
+}
+.big-btn {
+  border-right: 0;
 }
 ion-view.main-view ion-content {
   width: 100%;
