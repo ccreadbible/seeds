@@ -11,7 +11,7 @@ angular.module('seeds.common.mixins.readings', [])
         $actions.resizeFont,
       ],
 
-      loadReadings: function(){
+      loadReadings: function(scope){
         var self = this;
 
         $http({
@@ -20,6 +20,11 @@ angular.module('seeds.common.mixins.readings', [])
         }).then(function(res){
           self.readings = res.data.verses;
           self.emitChange();
+        }).catch(function(res){
+          console.err("loading readings error", res.status, res.data);
+        }).finally(function(){
+          console.log('loading complete');  
+          scope.$broadcast('scroll.refreshComplete');
         });
       },
 

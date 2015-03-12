@@ -7,6 +7,9 @@
     <img src="img/ic_play_arrow_48px.svg">
   </md-button>
   <ion-content class="has-long-header">
+    <ion-refresher
+      on-refresh="homily.loadHomilyList()">
+    </ion-refresher>
     <ion-list can-swipe="true">
       <ion-item ng-repeat="item in homilyList" ng-click="homily.playAudio($index, item)" ng-class="{active : homily.isSelected(item)}">
         {{item.month}} 月 {{item.date}} 日
