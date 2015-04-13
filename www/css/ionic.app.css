@@ -6874,10 +6874,6 @@ a.button {
   top: 64px; }
 .platform-ios.platform-cordova:not(.fullscreen) .has-header, .platform-ios.platform-cordova:not(.fullscreen) .bar-subheader {
   top: 64px; }
-.platform-ios.platform-cordova:not(.fullscreen) .long-header .bar-header:not(.bar-subheader) {
-  height: 30vh; } /*custom*/
-.platform-ios.platform-cordova:not(.fullscreen) .has-long-header {
-  top: 31vh; } /*custom*/
 .platform-ios.platform-cordova:not(.fullscreen) .has-subheader {
   top: 108px; }
 .platform-ios.platform-cordova:not(.fullscreen) .has-tabs-top {
