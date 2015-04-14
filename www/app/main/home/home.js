@@ -16,6 +16,5 @@ angular.module('seeds.main.home', [])
       }
     });
 })
-.controller('HomeCtrl', function($scope){
-  
+.controller('HomeCtrl', function($scope, $store){
 });

@@ -54,7 +54,7 @@ ion-side-menu ion-content .item-complex a.item-content {
   color: #fff;
 }
 .accent-color {
-  background: #ff9800;
+  color: #ff9800;
 }
 .primary-text-color {
   color: #212121;
@@ -71,16 +71,11 @@ ion-side-menu ion-content .item-complex a.item-content {
 .ion-play.button,
 .ion-stop.button,
 .ion-pause.button {
-  font-size: 2em;
+  font-size: 1.7em;
+  line-height: normal;
   margin-right: 5px;
-  background-color: #8ecdd5;
   border-color: transparent;
   color: #565f61;
-}
-.ion-play.button:hover,
-.ion-stop.button:hover,
-.ion-pause.button:hover {
-  color: #fff;
 }
 .play-status {
   float: right;
@@ -151,6 +146,12 @@ md-tab .scroll-view {
   position: fixed;
   top: 100px;
   right: 3%;
+}
+footer {
+  height: 6vh;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 .bible-view .bar-footer {
   display: none;

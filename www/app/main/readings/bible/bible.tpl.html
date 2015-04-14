@@ -14,7 +14,7 @@
         </ion-scroll>
       </md-tab>
       <md-tab ng-disabled="tab.disabled" label="福音">
-        <ion-scroll style="height: 90vh" on-swipe-down="bible.showSettings()"
+        <ion-scroll style="height: 83vh" on-swipe-down="bible.showSettings()"
           on-swipe-up="bible.hideSettings()">
           <div class="font-size-sec" layout="row" layout-align="end center">
             <button class="big-btn" ng-click="bible.resizeFont(1)">大</button>
@@ -24,6 +24,14 @@
             <section class='reading-content' ng-bind-html='reading.gospel'></section>
           </div>
         </ion-scroll>
+        <footer class="footer-color">
+          <!-- <span class="icon ion-volume-medium accent-color" ng-click="bible.playAudio()"></span> -->
+          <div class="buttons">
+            <div class="ion-pause button" ng-click="bible.pauseAudio()"></div>
+            <div class="ion-stop button" ng-click="bible.stopAudio()"></div>
+            <div class="ion-play button" ng-click="bible.playAudio()"></div>
+          </div>
+        </footer>
       </md-tab>
     </md-tabs>
   </ion-content>

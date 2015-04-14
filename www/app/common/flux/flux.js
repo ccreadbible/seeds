@@ -20,8 +20,9 @@ angular.module('seeds.common.flux',[
 
     return flux.store({
       mixins: [homilyMixin, ReadingsMixin],
-      audio: undefined,
+      audio: null,
       lastPlay: 0,
+      currentTime: 0.0,
       
       actions:[
         $actions.createAudioObj,
@@ -29,31 +30,28 @@ angular.module('seeds.common.flux',[
         $actions.pauseAudio,
         $actions.stopAudio
       ],
-
       
       createAudioObj: function(){
-        this.audio = new Audio();
+        if(!this.audio)
+          this.audio = new Audio();
       },
 
       playAudio: function(id){
-        if(id === undefined){
-          id = this.lastPlay;
-        }else{
-          this.audio.src = this.homily[id].link;
-          this.lastPlay = id;
-        }
-        console.log(this.audio.src);
+        this.audio.src = this.homily[id].link;
+        this.audio.currentTime = (id !== this.lastPlay)? 0.0 : this.currentTime;
         this.audio.play();
+
+        this.lastPlay = id;
       },
 
       pauseAudio: function(){
         this.audio.pause();
+        this.currentTime = this.audio.currentTime;
       },
 
       stopAudio: function(){
         this.audio.pause();
-        // console.log(this.audio.currentTime);
-        this.audio.currentTime = 0.0;
+        this.currentTime = 0.0;
       },
 
       exports:{
