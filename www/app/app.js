@@ -1,9 +1,3 @@
-// Ionic Starter App
-
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.controllers' is found in controllers.js
 angular.module('seeds', [
   'ionic', 
   'seeds.common', 
@@ -38,7 +32,7 @@ angular.module('seeds', [
   
   $urlRouterProvider.otherwise('/main/home');
 })
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', ['$scope', '$ionicModal', '$timeout', function($scope, $ionicModal, $timeout) {
   // Form data for the login modal
   $scope.loginData = {};
 
@@ -69,4 +63,4 @@ angular.module('seeds', [
       $scope.closeLogin();
     }, 1000);
   };
-})
+}]);

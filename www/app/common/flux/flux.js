@@ -2,7 +2,7 @@ angular.module('seeds.common.flux',[
   'seeds.common.mixins.homily',
   'seeds.common.mixins.readings'
   ])
-  .factory('$actions', function(flux){
+  .factory('$actions', ['flux', function(flux){
     return flux.actions([
       'loadReadings',
       'loadHomilyList',
@@ -13,8 +13,9 @@ angular.module('seeds.common.flux',[
       'pauseAudio',
       'stopAudio'
     ]);
-  })
-  .factory('$store', function(flux, $actions, 
+  }])
+  .factory('$store', ['flux', '$actions', 'HomilyMixin',
+   'ReadingsMixin', function(flux, $actions, 
     HomilyMixin, ReadingsMixin){
 
     return flux.store({
@@ -79,4 +80,4 @@ angular.module('seeds.common.flux',[
 
       }
     });
-  })
+  }]);

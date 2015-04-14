@@ -1,5 +1,5 @@
 angular.module('seeds.common.mixins.homily', [])
-  .factory('HomilyMixin', function ($http, URLS, $actions) {
+  .factory('HomilyMixin', ['$http', 'URLS', '$actions', function ($http, URLS, $actions) {
 
     return homilyMixin = {
       homily: [],
@@ -25,4 +25,4 @@ angular.module('seeds.common.mixins.homily', [])
 
     };
 
-  });
+  }]);
