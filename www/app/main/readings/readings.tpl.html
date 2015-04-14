@@ -5,6 +5,9 @@
   </div>
   <div class="bottom-header dark-primary-color"></div>
   <ion-content class="has-long-header light-primary-color">
+    <ion-refresher
+      on-refresh="read.loadReadings()">
+    </ion-refresher>
     <ion-list>
       <ion-item ng-repeat="reading in readings" href="#/main/readings/{{$index}}">
         {{reading.date}}

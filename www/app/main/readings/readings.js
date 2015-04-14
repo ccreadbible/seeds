@@ -11,7 +11,7 @@ angular.module('seeds.main.readings', ['seeds.main.bible'])
       views: {
         'menuContent': {
           templateUrl: 'app/main/readings/readings.tpl.html',
-          controller: 'ReadingsCtrl'
+          controller: 'ReadingsCtrl as read'
         }
       }
     });
@@ -21,5 +21,8 @@ angular.module('seeds.main.readings', ['seeds.main.bible'])
   $store.bindTo($scope, function(){
     $scope.readings = $store.getReadings();
   });
+  this.loadReadings = function(){
+    $actions.loadReadings($scope);
+  };
  
 });

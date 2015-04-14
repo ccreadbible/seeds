@@ -23,6 +23,10 @@ angular.module('seeds.main.homilyList', [])
     $scope.homilyList = $store.getHomilyList();
   });
 
+  this.loadHomilyList = function(){
+    $actions.loadHomilyList($scope);
+  };
+
   var selected = null;
   this.playAudio = function(id, item){
     selected = item;
