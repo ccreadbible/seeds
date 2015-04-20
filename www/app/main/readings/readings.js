@@ -16,13 +16,25 @@ angular.module('seeds.main.readings', ['seeds.main.bible'])
       }
     });
 })
-.controller('ReadingsCtrl', function($scope, $actions, $store) {
-    
-  $store.bindTo($scope, function(){
-    $scope.readings = $store.getReadings();
-  });
-  this.loadReadings = function(){
-    $actions.loadReadings($scope);
+.controller('ReadingsCtrl', ['$scope', 'readingService', 'readingFactory',
+ function($scope, readingService, readingFactory) {
+  //ReadingsCtrl methods
+  this.loadReadings = function() {
+    readingFactory.loadReadings.call(readingService, $scope)
+    .then(function() {
+      $scope.$emit('readings:loaded');
+    }, function(err) {
+      $scope.readings = ["Something is wrong.."+err];
+    });
   };
- 
-});
+  //bind readings to scope
+  $scope.readings = readingService.readings;
+  //loading weekly readings before rendering today's reading
+  if(readingService.readings.length === 0) {
+    this.loadReadings();
+    $scope.$on('readings:render', function() {
+      $scope.readings = readingService.readings;
+    });
+  }
+
+}]);

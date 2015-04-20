@@ -38,7 +38,7 @@ angular.module('seeds.common.flux',[
 
       playAudio: function(id){
         this.audio.src = this.homily[id].link;
-        this.audio.currentTime = (id !== this.lastPlay)? 0.0 : this.currentTime;
+        // this.audio.currentTime = (id !== this.lastPlay)? 0.0 : this.currentTime;
         this.audio.play();
 
         this.lastPlay = id;
@@ -46,7 +46,7 @@ angular.module('seeds.common.flux',[
 
       pauseAudio: function(){
         this.audio.pause();
-        this.currentTime = this.audio.currentTime;
+        // this.currentTime = this.audio.currentTime;
       },
 
       stopAudio: function(){
@@ -70,11 +70,8 @@ angular.module('seeds.common.flux',[
 
         getFontSize: function() {
           return this.fontSize;
-        },
-
-        getTTSStatus: function() {
-          return this.ttsStatus;
         }
+
 
       }
     });

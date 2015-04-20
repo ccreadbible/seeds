@@ -8,7 +8,7 @@
     <ion-refresher
       on-refresh="read.loadReadings()">
     </ion-refresher>
-    <ion-list>
+    <ion-list ng-model = "readings">
       <ion-item ng-repeat="reading in readings" href="#/main/readings/{{$index}}">
         {{reading.date}}
       </ion-item>

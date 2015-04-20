@@ -17,21 +17,23 @@ angular.module('seeds.main', [
       controller: 'MainCtrl as main'
     });
 })
-.controller('MainCtrl', function($scope, $actions, $store){
-  $actions.loadReadings(); 
-  $actions.loadHomilyList();
+.controller('MainCtrl',['$scope', 'readingService', 'readingFactory', 
+  function($scope, readingService, readingFactory){
+  // $actions.loadReadings(); 
+  
+  // $actions.loadHomilyList();
 
-  this.pauseAudio = function(){
-    $actions.pauseAudio();
-  };
+  // this.pauseAudio = function(){
+  //   $actions.pauseAudio();
+  // };
 
-  this.stopAudio = function(){
-    $actions.stopAudio();
-    angular.element("ion-side-menu-content > ion-footer-bar").slideUp();
-  };
+  // this.stopAudio = function(){
+  //   $actions.stopAudio();
+  //   angular.element("ion-side-menu-content > ion-footer-bar").slideUp();
+  // };
 
-  this.playAudio = function(id){
-    $actions.playAudio(id);
-  };
+  // this.playAudio = function(id){
+  //   $actions.playAudio(id);
+  // };
 
-});
+}]);
