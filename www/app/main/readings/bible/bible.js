@@ -16,8 +16,10 @@ angular.module('seeds.main.bible', [])
       }
     });
 })
-.controller('BibleCtrl', ['$scope', '$stateParams', 'readingService', 'readingFactory',
-  function($scope, $stateParams, readingService, readingFactory) {
+
+.controller('BibleCtrl', ['$scope', '$stateParams', 'readingService', 
+  'readingFactory', 'audioService', 'homilyFactory',
+  function($scope, $stateParams, readingService, readingFactory, audioService, homilyFactory) {
     //BibleCtrl methods
     this.loadReading = function() {
       readingFactory.loadReadings.call(readingService, $scope.$parent)
@@ -27,7 +29,6 @@ angular.module('seeds.main.bible', [])
       }, function(err) {
         $scope.readings = ["Something is wrong.."+err];
       });
-     
     };
 
     this.resizeFont = function(size) {
@@ -35,12 +36,26 @@ angular.module('seeds.main.bible', [])
       angular.element("section.reading-content")
         .css('font-size', readingFactory.getFontSize.call(readingService));
     };
+    
+    this.playAudio = function() {
+      audioService.playAudio($stateParams.bibleId);
+    };
+
+    this.pauseAudio = function() {
+      audioService.pauseAudio();
+    };
+
+    this.stopAudio = function() {
+      audioService.stopAudio();
+    };
+
 
     //bind daily reading
     $scope.reading = readingFactory.getReading.call(readingService, $stateParams.bibleId);
     //loading weekly readings before rendering today's reading
     if(readingService.readings.length === 0) {
       this.loadReading();
+      homilyFactory.loadHomily.call(audioService);
       //render reading when receive event from rootScope
       $scope.$on('readings:render', function() {
         $scope.reading = readingFactory.getReading.call(readingService, $stateParams.bibleId);
@@ -48,31 +63,3 @@ angular.module('seeds.main.bible', [])
     }
 
 }]);
-// .controller('BibleCtrl', function($scope, $actions, $store, $stateParams){
-//   $store.bindTo($scope, function(){
-//     $scope.reading = $store.getReading($stateParams.bibleId);
-//     angular.element("section.reading-content").css('font-size', $store.getFontSize());
-//   });
-
-//   $actions.createAudioObj();
-
-  
-//   this.resizeFont = function(option){
-//     $actions.resizeFont(option);
-//     angular.element("section.reading-content").css('font-size', $store.getFontSize());
-//   };
-
-
-//   this.pauseAudio = function(){
-//     $actions.pauseAudio();
-//   };
-
-//   this.stopAudio = function(){
-//     $actions.stopAudio();
-//   };
-
-//   this.playAudio = function() {
-//     $actions.playAudio($stateParams.bibleId);
-//   };
- 
-// });

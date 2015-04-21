@@ -17,7 +17,8 @@ angular.module('seeds.main.readings', ['seeds.main.bible'])
     });
 })
 .controller('ReadingsCtrl', ['$scope', 'readingService', 'readingFactory',
- function($scope, readingService, readingFactory) {
+  'homilyFactory', 'audioService',
+ function($scope, readingService, readingFactory, homilyFactory, audioService) {
   //ReadingsCtrl methods
   this.loadReadings = function() {
     readingFactory.loadReadings.call(readingService, $scope)
@@ -32,6 +33,7 @@ angular.module('seeds.main.readings', ['seeds.main.bible'])
   //loading weekly readings before rendering today's reading
   if(readingService.readings.length === 0) {
     this.loadReadings();
+    homilyFactory.loadHomily.call(audioService);
     $scope.$on('readings:render', function() {
       $scope.readings = readingService.readings;
     });

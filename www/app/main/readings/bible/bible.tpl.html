@@ -2,8 +2,7 @@
   <ion-content scroll="false" class="has-header">
     <md-tabs md-selected="selectedIndex" class="md-accent">
       <md-tab ng-disabled="tab.disabled" label="讀經一">
-        <ion-scroll style="height: 90vh" on-swipe-down="bible.showSettings()"
-          on-swipe-up="bible.hideSettings()">
+        <ion-scroll style="height: 90vh">
           <div class="font-size-sec" layout="row" layout-align="end center">
             <button class="big-btn" ng-click="bible.resizeFont(1)">大</button>
             <button class="small-btn" ng-click="bible.resizeFont(0)">小</button>
@@ -24,14 +23,13 @@
             <section class='reading-content' ng-bind-html='reading.gospel'></section>
           </div>
         </ion-scroll>
-        <footer class="footer-color">
-          <!-- <span class="icon ion-volume-medium accent-color" ng-click="bible.playAudio()"></span> -->
+        <ion-footer-bar class="footer-color">
           <div class="buttons">
             <div class="ion-pause button" ng-click="bible.pauseAudio()"></div>
             <div class="ion-stop button" ng-click="bible.stopAudio()"></div>
             <div class="ion-play button" ng-click="bible.playAudio()"></div>
           </div>
-        </footer>
+        </ion-footer-bar>
       </md-tab>
     </md-tabs>
   </ion-content>

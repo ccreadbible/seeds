@@ -5,7 +5,6 @@
 */
 angular.module('seeds.main', [
   'seeds.main.readings',
-  'seeds.main.homilyList',
   'seeds.main.home'
 ])
 .config(function($stateProvider) {
@@ -17,23 +16,7 @@ angular.module('seeds.main', [
       controller: 'MainCtrl as main'
     });
 })
-.controller('MainCtrl',['$scope', 'readingService', 'readingFactory', 
-  function($scope, readingService, readingFactory){
-  // $actions.loadReadings(); 
-  
-  // $actions.loadHomilyList();
-
-  // this.pauseAudio = function(){
-  //   $actions.pauseAudio();
-  // };
-
-  // this.stopAudio = function(){
-  //   $actions.stopAudio();
-  //   angular.element("ion-side-menu-content > ion-footer-bar").slideUp();
-  // };
-
-  // this.playAudio = function(id){
-  //   $actions.playAudio(id);
-  // };
+.controller('MainCtrl',['$scope', 
+  function($scope){
 
 }]);

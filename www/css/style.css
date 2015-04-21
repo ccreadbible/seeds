@@ -31,12 +31,6 @@ ion-header-bar {
 .has-long-header {
   top: 31vh;
 }
-ion-side-menu-content ion-footer-bar.audio-bar {
-  display: none;
-}
-ion-side-menu-content ion-footer-bar .buttons {
-  margin-top: 0;
-}
 ion-side-menu ion-content,
 ion-side-menu ion-content .item-complex a.item-content {
   background-color: #c6c6c6;
@@ -67,36 +61,6 @@ ion-side-menu ion-content .item-complex a.item-content {
 }
 .footer-color {
   background: #f4f4f4;
-}
-.ion-play.button,
-.ion-stop.button,
-.ion-pause.button {
-  font-size: 1.7em;
-  line-height: normal;
-  margin-right: 5px;
-  border-color: transparent;
-  color: #565f61;
-}
-.play-status {
-  float: right;
-  background-color: #8ecdd5;
-  border-color: #8ecdd5;
-  font-size: 1.4em;
-  color: #808080;
-}
-#play {
-  position: absolute;
-  top: 20vh;
-  right: 50%;
-  margin-right: -26px;
-}
-ion-item span.ion-volume-medium {
-  float: right;
-  font-size: 1.5em;
-  display: none;
-}
-ion-item.active span.ion-volume-medium {
-  display: inline;
 }
 .readings-view .long-header h4 {
   margin: 0;
@@ -140,28 +104,6 @@ md-tab .scroll-view {
 }
 .content-wrapper > section > p {
   text-align: justify;
-}
-.tts-btn {
-  background-color: rgba(255,152,0,0.77);
-  position: fixed;
-  top: 100px;
-  right: 3%;
-}
-footer {
-  height: 6vh;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
-.bible-view .bar-footer {
-  display: none;
-  background-color: #f4f4f4;
-}
-.bible-view .bar-footer button {
-  color: #ff9800;
-}
-.bible-view button span {
-  font-size: 1.5em;
 }
 .font-size-sec {
   position: fixed;

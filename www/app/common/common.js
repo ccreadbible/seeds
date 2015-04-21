@@ -4,6 +4,7 @@
 * Description
 */
 angular.module('seeds.common', [
+  'seeds.common.mixins.homily',
   'seeds.common.mixins.readings'
 ])
 .constant('URLS', {
