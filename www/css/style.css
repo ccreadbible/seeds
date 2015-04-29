@@ -8,6 +8,9 @@ h1 {
 h4 {
   font-size: 1.1em;
 }
+.hide {
+  display: none;
+}
 .bottom-header {
   height: 1vh;
 }
@@ -106,20 +109,44 @@ md-tab .scroll-view {
   text-align: justify;
 }
 .font-size-sec {
-  position: fixed;
-  top: auto;
-  right: 4%;
-  margin-top: 5%;
-  font-size: 1rem;
+  font-size: 1.5rem;
 }
 .small-btn,
 .big-btn {
   border: 1px solid #ff9800;
-  color: #ff9800;
   background-color: transparent;
 }
 .big-btn {
   border-right: 0;
+}
+.footer-icons {
+  margin: 0 auto;
+}
+.footer-icons > div {
+  height: 44px;
+  width: 44px;
+  color: #727272;
+  font-size: 2em;
+  margin-right: 0.3em;
+}
+.footer-icons:last-child {
+  line-height: 1;
+}
+#audio-control,
+#font-control {
+  background-color: #fff;
+  border-top: 4px solid #b2ebf2;
+  position: fixed;
+  top: 90%;
+  left: 0;
+  width: 100%;
+  padding-top: 0.8em;
+}
+.ion-play,
+.ion-pause {
+  text-align: center;
+  font-size: 2.5em;
+  margin: 0 auto;
 }
 ion-view.main-view ion-content {
   width: 100%;

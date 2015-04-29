@@ -14,6 +14,7 @@ angular.module('seeds.common.mixins.readings', [])
     this.getFontSize = function() {
       return fontSize;
     };
+    
   }])
   .factory('readingFactory', ['$http', 'URLS', '$timeout', '$q',
    function($http, URLS, $timeout, $q) {

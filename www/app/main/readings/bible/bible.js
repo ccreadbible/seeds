@@ -17,9 +17,9 @@ angular.module('seeds.main.bible', [])
     });
 })
 
-.controller('BibleCtrl', ['$scope', '$stateParams', 'readingService', 
+.controller('BibleCtrl', ['$scope', '$stateParams', '$ionicModal', 'readingService', 
   'readingFactory', 'audioService', 'homilyFactory',
-  function($scope, $stateParams, readingService, readingFactory, audioService, homilyFactory) {
+  function($scope, $stateParams, $ionicModal, readingService, readingFactory, audioService, homilyFactory) {
     //BibleCtrl methods
     this.loadReading = function() {
       readingFactory.loadReadings.call(readingService, $scope.$parent)
@@ -38,10 +38,12 @@ angular.module('seeds.main.bible', [])
     };
     
     this.playAudio = function() {
+      angular.element('.ion-play, .ion-pause').toggleClass('hide');
       audioService.playAudio($stateParams.bibleId);
     };
 
     this.pauseAudio = function() {
+      angular.element('.ion-play, .ion-pause').toggleClass('hide');
       audioService.pauseAudio();
     };
 
@@ -61,5 +63,35 @@ angular.module('seeds.main.bible', [])
         $scope.reading = readingFactory.getReading.call(readingService, $stateParams.bibleId);
       });
     }
+
+    /*settings*/
+    $ionicModal.fromTemplateUrl('app/main/readings/bible/audio.html', {
+      scope: $scope,
+      animation: 'slide-in-up',
+      backdropClickToClose: true
+    }).then(function(modal) {
+      $scope.audioModal = modal;
+    }).catch(function(err) {
+      console.log('err');
+    });
+
+     $ionicModal.fromTemplateUrl('app/main/readings/bible/font.html', {
+      scope: $scope,
+      animation: 'slide-in-up',
+      backdropClickToClose: true
+    }).then(function(modal) {
+      $scope.fontModal = modal;
+    }).catch(function(err) {
+      console.log('err');
+    });
+
+    $scope.openModal = function(option) {
+      (option)? $scope.audioModal.show(): $scope.fontModal.show();
+    };
+    $scope.closeModal = function(option) {
+      (option)? $scope.audioModal.hide(): $scope.fontModal.hide();
+
+    };
+
 
 }]);

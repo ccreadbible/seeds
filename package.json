@@ -19,6 +19,7 @@
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^0.1.7",
     "karma-mocha": "^0.1.10",
+    "karma-nyan-reporter": "0.0.60",
     "mocha": "^2.2.4",
     "shelljs": "^0.3.0"
   }

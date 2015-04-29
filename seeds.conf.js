@@ -10,19 +10,19 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha'],
+    frameworks: ['mocha', 'sinon-chai'],
 
 
     // list of files / patterns to load in the browser
     files: [
       'lib/angular/angular.js',
       'lib/angular-mocks/angular-mocks.js',
-      'lib/flux-angular/build/flux-angular.js',
+      'lib/angular-ui-router/release/angular-ui-router.js',
       'app/**/*.js',
-      '../test/**/fluxSpec.js'
+      '../test/app/**/readingsSpec.js'
     ],
 
-
+    
     // list of files to exclude
     exclude: [
     ],
@@ -37,8 +37,11 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['nyan'],
 
+    nyanReporter: {
+      suppressErrorReport: true
+    },
 
     // web server port
     port: 9876,
