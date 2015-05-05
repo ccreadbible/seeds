@@ -23,7 +23,8 @@ angular.module('seeds.common.mixins.homily', [])
       if(e.type === 'error') {
          var alertPopup = $ionicPopup.alert({
            title: '音頻不存在',
-           template: '由於林神父的個人行程，沒有參與此次彌撒'
+           template: '由於林神父的個人行程，沒有參與此次彌撒',
+           okType: 'button-assertive'
          });
          alertPopup.then(function(res) {
           //reset to a valid link
