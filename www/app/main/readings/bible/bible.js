@@ -74,7 +74,7 @@ angular.module('seeds.main.bible', [])
       console.log('err');
     });
 
-     $ionicModal.fromTemplateUrl('app/main/readings/bible/font.html', {
+    $ionicModal.fromTemplateUrl('app/main/readings/bible/font.html', {
       scope: $scope,
       animation: 'slide-in-up',
       backdropClickToClose: true

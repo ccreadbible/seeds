@@ -33,8 +33,7 @@ angular.module('seeds.common.mixins.homily', [])
       }
     };
   }])
-  .factory('homilyFactory', ['$http', 'URLS', '$timeout', '$q',
-    function ($http, URLS, $timeout, $q) {
+  .factory('homilyFactory', ['$http', 'URLS', function ($http, URLS) {
 
       var loadHomily = function(){
         var self = this;
@@ -44,7 +43,6 @@ angular.module('seeds.common.mixins.homily', [])
           url: URLS.api + '/homily'
         }).then(function(res){
           self.homily = res.data.homily;
-          console.log(self.homily);
         }).catch(function(res){
           console.err("loading homily error", res.status, res.data);
         }).finally(function(){

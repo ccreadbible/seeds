@@ -1,9 +1,10 @@
 body,
 html {
   color: #212121;
+  font-size: 1em;
 }
 h1 {
-  font-size: 1.4rem;
+  font-size: 1.38em;
 }
 h4 {
   font-size: 1.1em;
@@ -12,10 +13,10 @@ h4 {
   display: none;
 }
 .bottom-header {
-  height: 1vh;
+  height: 1%;
 }
 .long-header {
-  height: 30vh;
+  height: 30%;
   width: 100%;
   text-align: center;
 }
@@ -32,7 +33,7 @@ ion-header-bar {
   border: 0;
 }
 .has-long-header {
-  top: 31vh;
+  top: 31% !important;
 }
 ion-side-menu ion-content,
 ion-side-menu ion-content .item-complex a.item-content {
@@ -65,15 +66,20 @@ ion-side-menu ion-content .item-complex a.item-content {
 .footer-color {
   background: #f4f4f4;
 }
+.accent-primary-color {
+  background: #ff9800;
+}
 .readings-view .long-header h4 {
   margin: 0;
   width: 60%;
-  color: #b2ebf2;
   text-align: center;
 }
 .readings-view .long-header h1 {
   margin-bottom: 0.2em;
-  margin-top: 1em;
+  margin-top: 1.6em;
+}
+.readings-view .item {
+  border-color: #ff9800;
 }
 md-tabs.md-default-theme section.md-header {
   background-color: #f4f4f4;
@@ -121,6 +127,7 @@ md-tab .scroll-view {
 }
 .footer-icons {
   margin: 0 auto;
+  text-align: center;
 }
 .footer-icons > div {
   height: 44px;
@@ -168,4 +175,10 @@ ion-view.main-view section h1 {
   color: #fff;
   text-align: center;
   font: 3em/80px Helvetica, sans-serif;
+}
+@media screen and (max-device-width: 568px) {
+  body,
+  html {
+    font-size: 0.9em;
+  }
 }
