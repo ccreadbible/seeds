@@ -33,7 +33,7 @@ angular.module('seeds.main.readings', ['seeds.main.bible'])
   this.displayReadings = function() {
     //bind readings to scope
     $scope.readings = readingService.readings;
-    //loading weekly readings before rendering today's reading
+    //loading weekly readings and homily
     if(readingService.readings.length === 0) {
       this.loadReadings();
       homilyFactory.loadHomily.call(audioService);

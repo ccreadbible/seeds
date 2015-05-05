@@ -36,7 +36,7 @@ angular.module('seeds.main.bible', [])
       angular.element("section.reading-content")
         .css('font-size', readingFactory.getFontSize.call(readingService));
     };
-    
+
     this.playAudio = function() {
       angular.element('.ion-play, .ion-pause').toggleClass('hide');
       audioService.playAudio($stateParams.bibleId);
@@ -50,7 +50,6 @@ angular.module('seeds.main.bible', [])
     this.stopAudio = function() {
       audioService.stopAudio();
     };
-
 
     //bind daily reading
     $scope.reading = readingFactory.getReading.call(readingService, $stateParams.bibleId);
