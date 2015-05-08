@@ -1,0 +1,33 @@
+<ion-view class="homilies-view" view-title="">
+  <div class="long-header light-primary-color">
+    <h1 class="title secondary-text-color">聆聽福音</h1>
+  </div>
+  <div class="bottom-header accent-primary-color"></div>
+  <ion-content class="has-long-header">
+    <ion-list ng-model="homilies">
+      <div class="item item-divider" layout="row">
+        <span flex="10"></span>
+        <span flex layout="row" layout-align="space-around center">
+          <span>曲目</span>
+          <span>主講</span>
+          <span class="ion-ios-stopwatch-outline"></span>
+        </span>
+      </div>
+      <ion-item ng-repeat="homily in homilies" layout="row">
+        <span flex="10">
+          <div class="ion-play" ng-click="homilyCtrl.playAudio($index)"></div>
+          <div class="ion-pause hide" ng-click="homilyCtrl.pauseAudio($index)"></div>
+        </span>
+        <span flex class="row" layout-align="space-around center">
+          <span>
+            <div>Title </div>
+            <div class="duration">{{homily.month}}/{{homily.date}}</div>
+          </span>
+          <span>林思川神父</span>
+          <span>03:30</span>
+        </span>
+      </ion-item>
+    </ion-list>
+
+  </ion-content>
+</ion-view>

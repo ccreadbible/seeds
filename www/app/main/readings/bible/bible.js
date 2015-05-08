@@ -38,12 +38,13 @@ angular.module('seeds.main.bible', [])
     };
 
     this.playAudio = function() {
-      angular.element('.ion-play, .ion-pause').toggleClass('hide');
-      audioService.playAudio($stateParams.bibleId);
+      var ele = '#audio-control .ion-play, .ion-pause';
+      angular.element(ele).toggleClass('hide');
+      audioService.playAudio($stateParams.bibleId, ele);
     };
 
     this.pauseAudio = function() {
-      angular.element('.ion-play, .ion-pause').toggleClass('hide');
+      angular.element('#audio-control .ion-play, .ion-pause').toggleClass('hide');
       audioService.pauseAudio();
     };
 

@@ -1,61 +1,45 @@
 /*tabs*/
-md-tabs.md-default-theme section.md-header
-  background-color rgb(244, 244, 244)
-  border-top 1px rgba(128, 128, 128, 0.24) solid
-
-md-tabs.md-default-theme md-tab.active
-  color #FF9800
-
-md-tabs.md-default-theme md-tab
-  color #727272
-
-md-tabs.md-default-theme md-tabs-ink-bar
-  color: #FF9800
-  background: #FF9800 //tab underline
-
-md-tab[aria-selected="true"]
-  border 0
-
-/*tab content*/
-md-tab .scroll-view
-  position absolute;
-  top 4em  
-  bottom 0  
-  left 0  
-  right 0
-.content-wrapper
-  padding 0 4% 6em
-
-.content-wrapper > section
-  margin-top 5%
-
-.content-wrapper > section > p
-  text-align justify
-
-.font-size-sec
-  font-size 1.5rem
-.small-btn
-.big-btn
-  border 1px solid #FF9800
-  background-color transparent
-
-.big-btn
-  border-right 0
+md-tabs.md-default-theme 
+  section.md-header
+    background-color rgb(244, 244, 244)
+    border-top 1px rgba(128, 128, 128, 0.24) solid
+    md-tab
+      color #727272
+      &[aria-selected="true"]
+        border 0
+      &.active
+        color #FF9800
+    md-tabs-ink-bar
+      color: #FF9800
+      background: #FF9800 //tab underline
+  section.md-tabs-content 
+    .scroll-view
+      position absolute;
+      top 4em  
+      bottom 0  
+      left 0  
+      right 0
+      .content-wrapper
+        padding 0 4% 6em
+        section
+          margin-top 5%
+          p
+            text-align justify
 
 /*footer*/
 .footer-icons
   margin 0 auto
   text-align center
-.footer-icons > div
-  height 44px
-  width 44px
-  color rgb(114, 114, 114)
-  font-size 2em
-  margin-right .3em
-.footer-icons:last-child
-  line-height 1
+  div
+    height 44px
+    width 44px
+    color rgb(114, 114, 114)
+    font-size 1.6em
+    margin-right .3em
+  &:last-child
+    line-height 1
 
-/*settings*/
+/*styles for audio.html, font.html*/
 #audio-control
 #font-control
   background-color #FFF
@@ -65,9 +49,26 @@ md-tab .scroll-view
   left 0
   width 100%
   padding-top .8em
-.ion-play
-.ion-pause
-  text-align center
-  font-size 2.5em
-  margin 0 auto
+#audio-control  
+  .ion-play
+  .ion-pause
+  .soundtrack-title
+    text-align center
+    font-size 2.5em
+    margin 0 auto
+  .soundtrack-title
+    font-size .8em
+
+
+common-font-btn()
+  .small-btn
+  .big-btn
+    border 1px solid #FF9800
+    background-color transparent
+#font-control 
+  .font-size-sec
+    font-size 1.5rem
+    common-font-btn()
+    .big-btn
+      border-right 0
 

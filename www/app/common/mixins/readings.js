@@ -16,27 +16,25 @@ angular.module('seeds.common.mixins.readings', [])
     };
     
   }])
-  .factory('readingFactory', ['$http', 'URLS', '$q',
-   function($http, URLS, $q) {
+  .factory('readingFactory', ['$http',
+   'URLS', '$q',
+    function($http, URLS, $q) {
     var loadReadings = function(scope){
       var self = this;
-      var promise = $q(function(resolve, reject){
-        $http({
-            method: 'GET',
-            url: URLS.api + '/readings'})
-          .then(function(res) {
-            self.readings = res.data.verses;
-            resolve(self.readings);
-          })
-          .catch(function(err) {
-            console.err("loading readings error");
-            reject(err);
-          }).finally(function() {
-            console.log('loading complete');  
-            scope.$broadcast('scroll.refreshComplete');
-          });
-      })
-      return promise;
+      var defer = $q.defer();
+      $http({
+          method: 'GET',
+          url: URLS.api + '/readings'})
+        .then(function(res) {
+          defer.resolve(res.data.verses);
+        })
+        .catch(function(err) {
+          defer.reject("loading readings error: ", err);
+        }).finally(function() {
+          console.log('loading readings complete');  
+          scope.$broadcast('scroll.refreshComplete');
+        });
+      return defer.promise;
     };
     var getReading = function(id) {
       return this.readings[id];

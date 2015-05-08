@@ -4,7 +4,7 @@ html {
   font-size: 1em;
 }
 h1 {
-  font-size: 1.38em;
+  font-size: 2em;
 }
 h4 {
   font-size: 1.1em;
@@ -81,59 +81,66 @@ ion-side-menu ion-content .item-complex a.item-content {
 .readings-view .item {
   border-color: #ff9800;
 }
+.homilies-view .long-header h1 {
+  padding-top: 8%;
+  text-align: center;
+}
+.homilies-view .item {
+  border-color: #ff9800;
+}
+.homilies-view .item .ion-play,
+.homilies-view .item .ion-pause {
+  line-height: 2;
+  height: 44px;
+  width: 44px;
+  font-size: 1.5em;
+  padding-left: 0.4em;
+}
+.homilies-view .item .duration {
+  font-size: 0.8em;
+}
 md-tabs.md-default-theme section.md-header {
   background-color: #f4f4f4;
   border-top: 1px rgba(128,128,128,0.24) solid;
 }
-md-tabs.md-default-theme md-tab.active {
-  color: #ff9800;
-}
-md-tabs.md-default-theme md-tab {
+md-tabs.md-default-theme section.md-header md-tab {
   color: #727272;
 }
-md-tabs.md-default-theme md-tabs-ink-bar {
+md-tabs.md-default-theme section.md-header md-tab[aria-selected="true"] {
+  border: 0;
+}
+md-tabs.md-default-theme section.md-header md-tab.active {
+  color: #ff9800;
+}
+md-tabs.md-default-theme section.md-header md-tabs-ink-bar {
   color: #ff9800;
   background: #ff9800;
 }
-md-tab[aria-selected="true"] {
-  border: 0;
-}
-md-tab .scroll-view {
+md-tabs.md-default-theme section.md-tabs-content .scroll-view {
   position: absolute;
   top: 4em;
   bottom: 0;
   left: 0;
   right: 0;
 }
-.content-wrapper {
+md-tabs.md-default-theme section.md-tabs-content .scroll-view .content-wrapper {
   padding: 0 4% 6em;
 }
-.content-wrapper > section {
+md-tabs.md-default-theme section.md-tabs-content .scroll-view .content-wrapper section {
   margin-top: 5%;
 }
-.content-wrapper > section > p {
+md-tabs.md-default-theme section.md-tabs-content .scroll-view .content-wrapper section p {
   text-align: justify;
-}
-.font-size-sec {
-  font-size: 1.5rem;
-}
-.small-btn,
-.big-btn {
-  border: 1px solid #ff9800;
-  background-color: transparent;
-}
-.big-btn {
-  border-right: 0;
 }
 .footer-icons {
   margin: 0 auto;
   text-align: center;
 }
-.footer-icons > div {
+.footer-icons div {
   height: 44px;
   width: 44px;
   color: #727272;
-  font-size: 2em;
+  font-size: 1.6em;
   margin-right: 0.3em;
 }
 .footer-icons:last-child {
@@ -149,11 +156,26 @@ md-tab .scroll-view {
   width: 100%;
   padding-top: 0.8em;
 }
-.ion-play,
-.ion-pause {
+#audio-control .ion-play,
+#audio-control .ion-pause,
+#audio-control .soundtrack-title {
   text-align: center;
   font-size: 2.5em;
   margin: 0 auto;
+}
+#audio-control .soundtrack-title {
+  font-size: 0.8em;
+}
+#font-control .font-size-sec {
+  font-size: 1.5rem;
+}
+#font-control .font-size-sec .small-btn,
+#font-control .font-size-sec .big-btn {
+  border: 1px solid #ff9800;
+  background-color: transparent;
+}
+#font-control .font-size-sec .big-btn {
+  border-right: 0;
 }
 ion-view.main-view ion-content {
   width: 100%;
