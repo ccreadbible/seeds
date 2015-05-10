@@ -2,11 +2,14 @@ var expect = chai.expect,
     should = chai.should();
 
 describe('seeds.common.mixins.readings', function() {
-  var readingService;
+  var readingService, readingFactory;
+  beforeEach(module('seeds.common'));
   beforeEach(module('seeds.common.mixins.readings'));
   beforeEach(inject(function($injector) {
     readingService = $injector.get('readingService');
+    readingFactory = $injector.get('readingFactory');    
   }));
+
   describe('readingService', function() {
     it('should have readings as empty array', function() {
       expect(readingService.readings).to.be.an('array');
@@ -18,11 +21,13 @@ describe('seeds.common.mixins.readings', function() {
     it('should have getFontSize method', function() {
       should.exist(readingService.getFontSize);
     });
+
     describe('getFontSize', function() {
       it('should return fontSize with default value 15', function() {
         expect(readingService.getFontSize()).equal(15);
       });
     });
+
     describe('resizeFont', function() {
       it('should increase fontSize by 1 with input 1', function() {
         readingService.resizeFont(1);
@@ -59,6 +64,14 @@ describe('seeds.common.mixins.readings', function() {
   
   });
   describe('readingFactory', function() {
-
+    it('should have loadReadings method', function() {
+      should.exist(readingFactory.loadReadings);
+    });
+    it('should have getReading method', function() {
+      should.exist(readingFactory.getReading);
+    });
+    it('should have getFontSize method', function() {
+      should.exist(readingFactory.getFontSize);
+    });
   });
 });

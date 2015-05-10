@@ -1,13 +1,10 @@
 <ion-view class="readings-view" view-title="">
   <div class="long-header light-primary-color" layout="column" layout-align="center center">
-    <h1 class="title secondary-text-color">一週讀經</h1>
-    <h4 class="secondary-text-color">人生活不只靠餅， 而也靠天主口中所發的一切言語 - 瑪竇福音 4:4<h4>
+    <h1 class="title">一週讀經</h1>
+    <h4>人生活不只靠餅， 而也靠天主口中所發的一切言語 - 瑪竇福音 4:4</h4>
   </div>
   <div class="bottom-header accent-primary-color"></div>
   <ion-content class="has-long-header">
-    <ion-refresher
-      on-refresh="read.loadReadings()">
-    </ion-refresher>
     <ion-list ng-model="readings">
       <ion-item ng-repeat="reading in readings" href="#/main/readings/{{$index}}">
         {{reading.date}}

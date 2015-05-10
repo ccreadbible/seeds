@@ -1,38 +1,20 @@
+var nib = require('nib');
+var bower = require('bower');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
-var bower = require('bower');
 var concat = require('gulp-concat');
-// var sass = require('gulp-sass');
-var nib = require('nib');
 var minifyCss = require('gulp-minify-css');
+var stylus = require('gulp-stylus');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
 var bs = require('browser-sync');
 var reload = bs.reload;
-var stylus = require('gulp-stylus');
 
 var paths = {
-  sass: ['./scss/**/*.scss'],
-  stylus: ['www/**/*.styl'],
+  stylus: ['www/**/*.styl']
 };
 
 gulp.task('default', ['serve']);
-
-// gulp.task('sass', function(done) {
-//   gulp.src('./scss/ionic.app.scss')
-//     .pipe(sass())
-//     .pipe(gulp.dest('./www/css/'))
-//     .pipe(minifyCss({
-//       keepSpecialComments: 0
-//     }))
-//     .pipe(rename({ extname: '.min.css' }))
-//     .pipe(gulp.dest('./www/css/'))
-//     .on('end', done);
-// });
-
-gulp.task('watch', function() {
-  gulp.watch(paths.sass, ['sass']);
-});
 
 gulp.task('install', ['git-check'], function() {
   return bower.commands.install()
@@ -58,7 +40,12 @@ gulp.task('stylus', function() {
   return gulp.src(['www/app/style.styl'])
     .pipe(stylus({use: [nib()]}))
     .pipe(gulp.dest('www/css'))
-    .pipe(reload({ stream: true }));
+    .pipe(reload({ stream: true }))
+    .pipe(minifyCss({
+      keepSpecialComments: 0
+    }))
+    .pipe(rename({ extname: '.min.css' }))
+    .pipe(gulp.dest('./www/css/'));
 });
 
 gulp.task('serve', function() {

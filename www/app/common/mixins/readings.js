@@ -14,12 +14,10 @@ angular.module('seeds.common.mixins.readings', [])
     this.getFontSize = function() {
       return fontSize;
     };
-    
   }])
   .factory('readingFactory', ['$http',
-   'URLS', '$q',
-    function($http, URLS, $q) {
-    var loadReadings = function(scope){
+   'URLS', '$q', function($http, URLS, $q) {
+      var loadReadings = function(scope){
       var self = this;
       var defer = $q.defer();
       $http({
@@ -32,7 +30,6 @@ angular.module('seeds.common.mixins.readings', [])
           defer.reject("loading readings error: ", err);
         }).finally(function() {
           console.log('loading readings complete');  
-          scope.$broadcast('scroll.refreshComplete');
         });
       return defer.promise;
     };

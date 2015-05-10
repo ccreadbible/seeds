@@ -32,11 +32,7 @@ angular.module('seeds', [
   $urlRouterProvider.otherwise('/main/home');
 })
 .controller('AppCtrl', ['$scope', '$ionicModal', '$timeout', function($scope, $ionicModal, $timeout) {
-  // $scope.$on('readings:loaded', function() {
-  //   console.log('notify children');
-  //   $scope.$broadcast('readings:render');
-  // });
-
+  
   // Form data for the login modal
   $scope.loginData = {};
 
