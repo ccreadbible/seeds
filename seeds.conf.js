@@ -22,7 +22,13 @@ module.exports = function(config) {
       '../test/app/**/readingsSpec.js'
     ],
 
-    
+    client: {
+      mocha: {
+        reporter: 'html', // change Karma's debug.html to the mocha web reporter
+        ui: 'bdd'
+      }
+    },
+
     // list of files to exclude
     exclude: [
     ],
@@ -37,11 +43,12 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['nyan'],
+    // reporters: ['nyan'],
 
-    nyanReporter: {
-      suppressErrorReport: true
-    },
+    // nyanReporter: {
+    //   suppressErrorReport: true
+    // },
+   
 
     // web server port
     port: 9876,

@@ -26,7 +26,7 @@ angular.module('seeds.main.homilies', [])
       this.playAudio = function (id) {
         //if currently playing another soundtrack, pause it first
         if(audioService.currentPlaying !== null)
-          this.pauseAudio(id);
+          audioService.pauseAudio();
 
         this.toggleButton(id);
         angular.element('.homilies-view ion-item:nth-child('+(id+2)+')')
@@ -44,6 +44,7 @@ angular.module('seeds.main.homilies', [])
       };
 
       this.toggleButton = function (id) {
+        console.log('toggle',id);
         var ele = '.homilies-view ion-item:nth-child('+(id+2)+') .ion-play, '+
                   '.homilies-view ion-item:nth-child('+(id+2)+') .ion-pause'
         angular.element(ele).toggleClass('hide');

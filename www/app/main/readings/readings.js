@@ -17,6 +17,6 @@ angular.module('seeds.main.readings', ['seeds.main.bible'])
     });
 })
 .controller('ReadingsCtrl', ['$scope', 'readingService',
-    'readingFactory', function($scope, readingService, readingFactory) {
-        $scope.readings = readingService.readings;
+    function($scope, readingService) {
+      $scope.readings = readingService.readings;
 }]);

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mocha</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <!-- test framework -->
+    <script src="../node_modules/chai/chai.js"></script>
+    <script src="../node_modules/mocha/mocha.js"></script>
+    <script src="../node_modules/karma-sinon-chai/node_modules/sinon-chai/lib/sinon-chai.js"></script>
+    <script src="../node_modules/sinon/pkg/sinon.js"></script>
+    <script>mocha.setup('bdd')</script>
+    <script src="../www/lib/angular/angular.js"></script>
+    <script src="../www/lib/angular-mocks/angular-mocks.js"></script>
+    <script src='../www/lib/angular-ui-router/release/angular-ui-router.js'></script>
+    <!-- test files -->
+    <script src="app/common/mixins/readingsSpec.js"></script>
+    <script src="app/main/readings/readingsSpec.js"></script>
+
+    <!-- app files -->
+    <script src="../www/app/app.js"></script>
+    <script src="../www/app/common/common.js"></script>
+    <script src="../www/app/common/mixins/homily.js"></script>
+    <script src="../www/app/common/mixins/readings.js"></script>
+    <script src="../www/app/main/main.js"></script>
+    <script src="../www/app/main/home/home.js"></script>
+    <script src="../www/app/main/homilies/homilies.js"></script>
+    <script src="../www/app/main/readings/readings.js"></script>
+    <script src="../www/app/main/readings/bible/bible.js"></script>
+    <script>
+      mocha.run();
+    </script>
+  </body>
+</html>

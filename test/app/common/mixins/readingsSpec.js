@@ -2,12 +2,14 @@ var expect = chai.expect,
     should = chai.should();
 
 describe('seeds.common.mixins.readings', function() {
-  var readingService, readingFactory;
+  var readingService, readingFactory, authRequestHandler, 
+      httpBackend;
   beforeEach(module('seeds.common'));
   beforeEach(module('seeds.common.mixins.readings'));
-  beforeEach(inject(function($injector) {
-    readingService = $injector.get('readingService');
-    readingFactory = $injector.get('readingFactory');    
+  beforeEach(inject(function(_readingService_, _readingFactory_,$httpBackend) {
+    readingService = _readingService_;
+    readingFactory = _readingFactory_;
+    httpBackend = $httpBackend;
   }));
 
   describe('readingService', function() {
@@ -64,6 +66,17 @@ describe('seeds.common.mixins.readings', function() {
   
   });
   describe('readingFactory', function() {
+    var mockService;
+    beforeEach(function() {
+      mockService = function() {
+        var fontSize = 15;
+        this.readings = [{gospel: 'gospel1'}, 
+            {gospel: 'gospel2'}];
+        this.getFontSize = function() {
+          return fontSize;
+        };
+      };
+    });
     it('should have loadReadings method', function() {
       should.exist(readingFactory.loadReadings);
     });
@@ -72,6 +85,42 @@ describe('seeds.common.mixins.readings', function() {
     });
     it('should have getFontSize method', function() {
       should.exist(readingFactory.getFontSize);
+    });
+
+    describe('loadReadings', function() {
+      it('should fetch readings', function() {
+        httpBackend.whenGET('http://ccreadbible.azurewebsites.net/api/readings')
+          .respond({
+            verses: ['data1', 'data2', 'data3']
+          });
+        readingFactory.loadReadings()
+          .then(function(res) {
+            expect(res).to.be.an('array');
+          });
+        httpBackend.flush();
+      });
+    });
+
+    describe('getReading', function() {
+      it('should retrive the reading by id', function() {
+        service = new mockService();
+        expect(readingFactory.getReading.call(service, 0).gospel)
+            .equal('gospel1');
+        expect(readingFactory.getReading.call(service, 1).gospel)
+            .equal('gospel2');
+      });
+    });
+
+    describe('getFontSize', function() {
+      it('should get font size through readingService', function() {
+        service = new mockService();
+        var spy = sinon.spy(service, 'getFontSize');
+        readingFactory.getFontSize.call(service);
+        expect(spy.calledOnce).to.be.true;
+      });
+      it('should return the font size configured in readingService', function() {
+        expect(readingFactory.getFontSize.call(service)).equal(15);
+      });
     });
   });
 });

@@ -38,8 +38,7 @@ angular.module('seeds.main.bible', [])
     };
 
     this.playAudio = function() {
-      var ele = '#audio-control .ion-play, .ion-pause';
-      angular.element(ele).toggleClass('hide');
+      angular.element('#audio-control .ion-play, .ion-pause').toggleClass('hide');
       audioService.playAudio($stateParams.bibleId, ele);
     };
 

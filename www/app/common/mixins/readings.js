@@ -17,8 +17,8 @@ angular.module('seeds.common.mixins.readings', [])
   }])
   .factory('readingFactory', ['$http',
    'URLS', '$q', function($http, URLS, $q) {
-      var loadReadings = function(scope){
-      var self = this;
+    
+    var loadReadings = function(){
       var defer = $q.defer();
       $http({
           method: 'GET',
@@ -31,6 +31,7 @@ angular.module('seeds.common.mixins.readings', [])
         }).finally(function() {
           console.log('loading readings complete');  
         });
+
       return defer.promise;
     };
     var getReading = function(id) {
