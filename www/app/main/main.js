@@ -43,6 +43,7 @@ angular.module('seeds.main', [
       .then(function(results) {
         audioService.homily = results[0];
         readingService.readings = results[1];
+        console.log(audioService.homily);
         $ionicLoading.hide();
       })
       .catch(function(error) {

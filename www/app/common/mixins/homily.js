@@ -14,6 +14,8 @@ angular.module('seeds.common.mixins.homily', [])
       this.currentPlaying = id;
       if(audio.src !== this.homily[id].link)
         audio.src = this.homily[id].link;
+
+      this.homily[id].duration = audio.duration;
       audio.play();
     };
     this.pauseAudio = function() {
@@ -54,7 +56,6 @@ angular.module('seeds.common.mixins.homily', [])
         var loadHomily = function(scope){
           var self = this;
           var defer = $q.defer();
-
           $http({
             method: 'GET',
             url: URLS.api + '/homily'

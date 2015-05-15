@@ -18,15 +18,18 @@ angular.module('seeds.main.homilies', [])
     });
 })
 .controller('HomiliesCtrl', ['$scope', 
-    'homilyFactory', 'audioService', 
-    function($scope, homilyFactory, audioService) {
+    'homilyFactory', 'audioService', 'readingService',
+    function($scope, homilyFactory, audioService, readingService) {
 
       $scope.homilies = audioService.homily;
-
+      $scope.readingTitles = _.pluck(readingService.readings, 'date');
       this.playAudio = function (id) {
         //if currently playing another soundtrack, pause it first
         if(audioService.currentPlaying !== null)
-          audioService.pauseAudio();
+          if(id === audioService.currentPlaying)
+            audioService.pauseAudio();
+          else
+            this.pauseAudio(audioService.currentPlaying);
 
         this.toggleButton(id);
         angular.element('.homilies-view ion-item:nth-child('+(id+2)+')')

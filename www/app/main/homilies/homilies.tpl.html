@@ -4,28 +4,33 @@
   </div>
   <div class="bottom-header accent-primary-color"></div>
   <ion-content class="has-long-header">
-    <ion-list ng-model="homilies">
+    <ion-list ng-model="homilies" can-swipe=true>
       <div class="item item-divider" layout="row">
         <span flex="10"></span>
-        <span flex layout="row" layout-align="space-around center">
-          <span>曲目</span>
-          <span>主講</span>
-          <span class="ion-ios-stopwatch-outline"></span>
+        <span flex class="row">
+          <span class="col col-33">曲目</span>
+          <span class="col col-33">主講</span>
+          <span class="col col-33 ion-ios-stopwatch-outline"></span>
         </span>
       </div>
-      <ion-item ng-repeat="homily in homilies" layout="row">
-        <span flex="10">
-          <div class="ion-play" ng-click="homilyCtrl.playAudio($index)"></div>
-          <div class="ion-pause hide" ng-click="homilyCtrl.pauseAudio($index)"></div>
-        </span>
-        <span flex class="row" layout-align="space-around center">
-          <span>
-            <div>Title </div>
-            <div class="homily-date">{{homily.month}}/{{homily.date}}</div>
+      <ion-item ng-repeat="homily in homilies">
+        <div layout="row">
+          <span flex="10">
+            <div class="ion-play" ng-click="homilyCtrl.playAudio($index)"></div>
+            <div class="ion-pause hide" ng-click="homilyCtrl.pauseAudio($index)"></div>
           </span>
-          <span>林思川神父</span>
-          <span>03:30</span>
-        </span>
+          <span flex class="row">
+            <span class="col col-33">
+              <p>{{readingTitles[$index]}} </p>
+              <div class="homily-date">{{homily.month}}/{{homily.date}}</div>
+            </span>
+            <span class="col col-33">林思川神父</span>
+            <span class="col col-33">{{homily.duration}}</span>
+          </span>
+        </div>
+        <ion-option-button class="button-positive" ui-sref="seeds.main.bible({bibleId:$index})">
+          閱讀
+        </ion-option-button>
       </ion-item>
     </ion-list>
 
