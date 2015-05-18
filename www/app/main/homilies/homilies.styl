@@ -1,13 +1,22 @@
 .homilies-view
-  ion-content
-    text-align center
-  ion-item
+  .long-header
     .ion-play
     .ion-pause
+    .ion-ios-skipbackward
+    .ion-ios-skipforward
+      color rgb(255, 255, 223)
       line-height 2      
       height 44px      
       width 44px      
       font-size 1.5em      
-      padding-left .4em
-    .homily-date
-      font-size .8em
+  ion-content
+    text-align left
+    .item-divider
+      font-weight bold
+      .ion-ios-stopwatch-outline
+        font-size 1.2em
+    ion-item
+      .item-content
+        padding 16px
+        .homily-date
+          font-size .8em

@@ -1,53 +1,60 @@
 angular.module('seeds.common.mixins.homily', [])
-  .service('audioService', ['$ionicPopup', function($ionicPopup) {
-    var audio = new Audio();
-    this.homily = [];
-    this.currentPlaying = null;
-    var ele = null;
-    var self = this;
-
-    audio.addEventListener('error', function(e) {
-      self.errorHandler(e, ele);
-    }, true);
-    this.playAudio = function(id, element) {
-      ele = element;
-      this.currentPlaying = id;
-      if(audio.src !== this.homily[id].link)
-        audio.src = this.homily[id].link;
-
-      this.homily[id].duration = audio.duration;
-      audio.play();
-    };
-    this.pauseAudio = function() {
-      audio.pause();
-    };
-    this.stopAudio = function() {
-      this.currentPlaying = null;
-      this.pauseAudio();
-      audio.currentTime = 0.0;
-    };
-    this.errorHandler = function(e, element) {
-      if(e.type === 'error') {
-        $ionicPopup.alert({
-          title: '音頻不存在',
-          template: '由於林神父的個人行程，沒有參與此次彌撒',
-          okType: 'button-assertive'
-        })
-        .then(function(res) {
-          //reset to a valid link
-          audio.src = 'http://www.ccreadbible.info/media/com_podcastmanager/2015homily/20150417.mp3'
-          self.resetStyle(element);
-        });
-      }
-    };
-    this.resetStyle = function (element) {
-      angular.element(element).toggleClass('hide');
-      if(element.split(' ')[0] === '.homilies-view') {
-        angular.element('.homilies-view ion-item:nth-child('+
-            (this.currentPlaying+2)+')').css('color', '#444');
-      }
-      this.currentPlaying = null;
-    };
+  .service('audioService', ['$ionicPopup', '$q',
+      function($ionicPopup, $q) {
+        var audios = [];
+        var ele = null;
+        var self = this;
+       
+        this.initAudios = function() {
+          this.homily.forEach(function(item, index) {
+            var audio = new Audio();
+            audio.src = item.link
+            audio.load();
+            audio.addEventListener('error', function(e) {
+              audios[index] = null;
+            }, true);
+            audio.addEventListener('loadedmetadata', function() {
+              var secs = Math.floor(audio.duration);
+              var min = Math.floor(secs / 60);
+              var sec = Math.floor(secs % 60);
+              self.homily[index].duration = ((min < 10)? '0'+min : min) +
+                  ':' + ((sec < 10)? '0'+sec : sec);
+            });
+            audios.push(audio);
+          });
+        };
+        this.playAudio = function(id, scope) {
+          if(audios[id] === null) {
+            this.errorHandler(id, scope);
+          }else {
+            audios[id].play();
+          }
+        };
+        this.pauseAudio = function(id) {
+          audios[id].pause();
+        };
+        this.stopAudio = function(id) {
+          this.pauseAudio(id);
+          audios[id].currentTime = 0.0;
+        };
+        this.isPaused = function(id) {
+          return audios[id].paused;
+        };
+        this.errorHandler = function(index, scope) {
+            $ionicPopup.alert({
+              title: '音頻不存在',
+              template: '此音頻可能未錄製完成，請稍候再試',
+              okType: 'button-assertive'
+            })
+            .then(function(res) {
+              scope.$emit('audio:invalid');
+              self.resetStyle(index);
+            });
+        };
+        this.resetStyle = function (id) {
+          angular.element('.homilies-view ion-item:nth-child('+
+              (id+2)+')').css('color', '#444');
+        };
   }])
   .factory('homilyFactory', ['$http', 
       'URLS', '$q', 

@@ -20,36 +20,61 @@ angular.module('seeds.main.homilies', [])
 .controller('HomiliesCtrl', ['$scope', 
     'homilyFactory', 'audioService', 'readingService',
     function($scope, homilyFactory, audioService, readingService) {
-
+      var self = this;
+      $scope.currentTrack = 0;
       $scope.homilies = audioService.homily;
       $scope.readingTitles = _.pluck(readingService.readings, 'date');
-      this.playAudio = function (id) {
-        //if currently playing another soundtrack, pause it first
-        if(audioService.currentPlaying !== null)
-          if(id === audioService.currentPlaying)
-            audioService.pauseAudio();
-          else
-            this.pauseAudio(audioService.currentPlaying);
-
-        this.toggleButton(id);
-        angular.element('.homilies-view ion-item:nth-child('+(id+2)+')')
-            .css('color', '#3FDCB6');
-
-        var ele = '.homilies-view ion-item:nth-child('+(id+2)+') .ion-play, '+
-          '.homilies-view ion-item:nth-child('+(id+2)+') .ion-pause'
-        audioService.playAudio(id, ele);
+      $scope.$on('audio:invalid', function(id) {
+        self.toggleButton();
+        ($scope.currentTrack === 6)? $scope.currentTrack = 0 : $scope.currentTrack++;
+      });
+      //audio functionalities
+      this.playAudio = function() {
+        this.toggleButton();
+        this.highlightCurrent();
+        audioService.playAudio($scope.currentTrack, $scope);
+      };
+      this.forward = function() {
+        if(!audioService.isPaused($scope.currentTrack))
+          this.stopAudio();
+        this.resetStyle();
+        ($scope.currentTrack === 6)? $scope.currentTrack = 0 : $scope.currentTrack++;
+        this.playAudio();
       };
 
-      this.pauseAudio = function(id) {
-        this.toggleButton(id);
-        angular.element('.homilies-view ion-item:nth-child('+(id+2)+')').css('color', '#444');
-        audioService.pauseAudio();
+      this.backward = function() {
+        if(!audioService.isPaused($scope.currentTrack))
+          this.stopAudio();
+
+        this.resetStyle();
+        ($scope.currentTrack === 0)? $scope.currentTrack = 6 : $scope.currentTrack--;
+        this.playAudio();
       };
 
-      this.toggleButton = function (id) {
-        console.log('toggle',id);
-        var ele = '.homilies-view ion-item:nth-child('+(id+2)+') .ion-play, '+
-                  '.homilies-view ion-item:nth-child('+(id+2)+') .ion-pause'
+      this.pauseAudio = function() {
+        this.toggleButton();
+        audioService.pauseAudio($scope.currentTrack);
+      };
+
+      this.stopAudio = function() {
+        this.toggleButton();
+        this.resetStyle();
+        audioService.stopAudio($scope.currentTrack);
+      };
+
+      //style UI
+      this.resetStyle = function() {
+        angular.element('.homilies-view ion-item:nth-child('+
+            ($scope.currentTrack+2)+')').css('color', '#444');
+      }
+      this.highlightCurrent = function() {
+        angular.element('.homilies-view ion-item:nth-child('+
+            ($scope.currentTrack+2)+')').css('color', '#3FDCB6');
+      };
+
+      this.toggleButton = function () {
+        var ele = '.homilies-view .ion-play, '+
+                  '.homilies-view .ion-pause';
         angular.element(ele).toggleClass('hide');
       };
 }])

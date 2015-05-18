@@ -8,18 +8,29 @@ md-progress-circular.md-default-theme .md-inset {
 md-progress-circular.md-default-theme .md-circle .md-mask .md-fill {
   background-color: #ff9800;
 }
-.homilies-view ion-content {
-  text-align: center;
-}
-.homilies-view ion-item .ion-play,
-.homilies-view ion-item .ion-pause {
+.homilies-view .long-header .ion-play,
+.homilies-view .long-header .ion-pause,
+.homilies-view .long-header .ion-ios-skipbackward,
+.homilies-view .long-header .ion-ios-skipforward {
+  color: #ffffdf;
   line-height: 2;
   height: 44px;
   width: 44px;
   font-size: 1.5em;
-  padding-left: 0.4em;
 }
-.homilies-view ion-item .homily-date {
+.homilies-view ion-content {
+  text-align: left;
+}
+.homilies-view ion-content .item-divider {
+  font-weight: bold;
+}
+.homilies-view ion-content .item-divider .ion-ios-stopwatch-outline {
+  font-size: 1.2em;
+}
+.homilies-view ion-content ion-item .item-content {
+  padding: 16px;
+}
+.homilies-view ion-content ion-item .item-content .homily-date {
   font-size: 0.8em;
 }
 md-tabs.md-default-theme section.md-header {
@@ -59,17 +70,11 @@ md-tabs.md-default-theme section.md-tabs-content .scroll-view .content-wrapper s
   margin: 0 auto;
   text-align: center;
 }
-.footer-icons div {
-  height: 44px;
-  width: 44px;
+.footer-icons span {
   color: #727272;
-  font-size: 1.6em;
+  font-size: 1.3em;
   margin-right: 0.3em;
 }
-.footer-icons:last-child {
-  line-height: 1;
-}
-#audio-control,
 #font-control {
   background-color: #fff;
   border-top: 4px solid #b2ebf2;
@@ -77,20 +82,10 @@ md-tabs.md-default-theme section.md-tabs-content .scroll-view .content-wrapper s
   top: 90%;
   left: 0;
   width: 100%;
-  padding-top: 0.8em;
-}
-#audio-control .ion-play,
-#audio-control .ion-pause,
-#audio-control .soundtrack-title {
-  text-align: center;
-  font-size: 2.5em;
-  margin: 0 auto;
-}
-#audio-control .soundtrack-title {
-  font-size: 0.8em;
 }
 #font-control .font-size-sec {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  margin: 2.6%;
 }
 #font-control .font-size-sec .small-btn,
 #font-control .font-size-sec .big-btn {
@@ -120,12 +115,6 @@ ion-view.main-view section h1 {
   color: #fff;
   text-align: center;
   font: 3em/80px Helvetica, sans-serif;
-}
-@media screen and (max-device-width: 568px) {
-  body,
-  html {
-    font-size: 0.9em;
-  }
 }
 body,
 html {
@@ -170,6 +159,9 @@ h4 {
 .bar-header {
   border: 0;
 }
+.button-clear.button-clear {
+  color: #fff;
+}
 /*list style*/
 ion-view ion-item.item {
   border-color: #ff9800;
@@ -204,4 +196,12 @@ ion-view ion-item.item {
 }
 .accent-primary-color {
   background-color: #ff9800;
+}
+@media screen and (max-width: 568px) {
+  h1 {
+    font-size: 1.8em;
+  }
+  h4 {
+    font-size: 0.9em;
+  }
 }
