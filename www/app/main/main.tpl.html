@@ -15,6 +15,10 @@
   <ion-side-menu side="left">
     <ion-content>
       <ion-list>
+        <ion-item class="item item-avatar">
+          <img ng-src="{{profileData.picture.data.url}}">
+          <h2>{{profileData.name}}</h2>
+        </ion-item>
         <ion-item nav-clear menu-close ui-sref="seeds.main.home" 
           ui-sref-active="active" class="item item-icon-left">
           <i class="icon ion-home"></i>
@@ -30,6 +34,7 @@
           <i class="icon ion-radio-waves"></i>
           收聽福音
         </ion-item>
+        <ion-item nav-clear menu-close ng-click="main.FacebookLogin()">Facebook Sign In</ion-item>
       </ion-list>
     </ion-content>
   </ion-side-menu>

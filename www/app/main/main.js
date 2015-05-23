@@ -24,10 +24,11 @@ angular.module('seeds.main', [
     'homilyFactory', 'audioService', 
     'readingService', 'readingFactory',
     '$ionicLoading', '$q',
+    '$cordovaOauth', '$http',
     function($scope, homilyFactory, 
         audioService, readingService, 
         readingFactory, $ionicLoading,
-        $q){
+        $q, $cordovaOauth, $http){
 
       $ionicLoading.show();
       
@@ -51,4 +52,26 @@ angular.module('seeds.main', [
         console.log(error);
       });
 
+
+      this.FacebookLogin = function() {
+        // console.log('auth');
+        $cordovaOauth.facebook("1627744717448547", ["email", "read_stream", "user_location"])
+          .then(function(success) {
+            $scope.token = success.access_token;
+
+            $http.get("https://graph.facebook.com/v2.2/me", 
+                { params: { access_token: $scope.token, 
+                              fields: "id,name,gender,location,picture", 
+                              format: "json" }})
+                .then(function(result) {
+                    $scope.profileData = result.data;
+                }, function(error) {
+                    alert("There was a problem getting your profile.  Check the logs for details.");
+                    console.log(JSON.stringify(error));
+
+            });
+          }, function (error) {
+            $scope.data = error;
+          });
+      };
 }]);

@@ -2,7 +2,8 @@ angular.module('seeds', [
   'ionic', 
   'seeds.common', 
   'seeds.main',
-  'ngMaterial'
+  'ngMaterial',
+  'ngCordova'
   ])
 
 .run(function($ionicPlatform) {
